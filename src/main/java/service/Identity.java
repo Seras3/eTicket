@@ -2,7 +2,7 @@ package service;
 
 
 public class Identity {
-    private String id;
+    private Long id;
     private String email;
     private Role role;
     // private String token;
@@ -19,22 +19,17 @@ public class Identity {
         // this.token = user.token;
     }
 
-    public Identity(String id, String email, int role) {
+    public Identity(Long id, String email, int role) {
         this.id = id;
         this.email = email;
-        switch(role) {
-            case 0:
-                this.role = Role.USER;
-                break;
-            case 1:
-                this.role = Role.ADMIN;
-                break;
-
+        switch (role) {
+            case 1 -> this.role = Role.ADMIN;
+            case 2 -> this.role = Role.USER;
         }
     }
 
 
-    public String getId() { return id; }
+    public Long getId() { return id; }
     public String getEmail() { return email; }
     public Role getRole() { return role; }
     // public String getToken() { return token; }

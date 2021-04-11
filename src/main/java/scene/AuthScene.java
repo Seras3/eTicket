@@ -4,9 +4,7 @@ import graphic.GUI;
 import service.Context;
 import service.Identity;
 import util.Command;
-import util.Filter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AuthScene extends Scene {

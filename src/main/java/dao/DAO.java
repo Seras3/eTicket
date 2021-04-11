@@ -3,16 +3,16 @@ package dao;
 import java.util.HashMap;
 import java.util.List;
 
-public interface DAO<T> extends Convertible<T> {
+public interface DAO<T> {
 
     T get(String id);
 
     List<T> getAll();
 
-    void add(T t);
+    boolean add(T t);
 
-    void update(T t);
+    boolean update(T t);
 
-    void delete(T t);
+    boolean delete(T t);
 
 }
