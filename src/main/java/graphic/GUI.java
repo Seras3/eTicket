@@ -1,6 +1,9 @@
 package graphic;
 
 import dto.AccountAuthDTO;
+import dto.EventDTO;
+import dto.EventRowDTO;
+import service.API;
 import service.AuthService;
 import util.Command;
 
@@ -46,6 +49,10 @@ public class GUI {
         System.out.println("Command is invalid, please try again.");
     }
 
+    public static void invalidCommandParameter(String parameter) {
+        System.out.println("Parameter " + parameter + " is invalid.");
+    }
+
     public static void exception(Exception e) {
         System.out.println(e.getMessage());
     }
@@ -67,8 +74,55 @@ public class GUI {
         }
     }
 
+    public static void apiResponse(API.Result api_result) {
+        switch(api_result) {
+            case OK:
+                System.out.println("Command successfully executed.");
+                break;
+            case NOT_FOUND:
+                System.out.println("Resource not found.");
+                break;
+            case FAIL:
+                System.out.println("Command failed.");
+                break;
+        }
+    }
+
     public static void welcome(String user) {
         System.out.println(String.format("Hello, %s! :D", user));
+    }
+
+    public static void eventsList(List<EventRowDTO> events) {
+        for(EventRowDTO event : events) {
+            System.out.println("~~~~~~~~~~~~~~~~~ ("+ event.getId() +") " + event.getName() + " ~~~~~~~~~~~~~~~~~");
+            System.out.println(event.getDescription());
+            System.out.println();
+        }
+    }
+
+    public static void eventShow(EventDTO event) {
+        System.out.println("~~~~~~~~ " + event.getName() + " ~~~~~~~~");
+        System.out.println(event.getDescription());
+        System.out.println();
+    }
+
+    public static boolean eventDelete(EventDTO event) {
+        System.out.println("Are you sure you want to delete "+event.getName() + "? (Y/N)");
+        return scan.nextLine().equals("Y");
+    }
+
+    public static void eventNotFound() {
+        System.out.println("Event not found.");
+    }
+
+    public static EventDTO getEvent(EventDTO event) {
+        System.out.print("Name: ");
+        event.setName(scan.nextLine());
+        System.out.print("Description: ");
+        event.setDescription(scan.nextLine());
+        System.out.print("Category id: ");
+        event.setCategory_id(Integer.valueOf(scan.nextLine()));
+        return event;
     }
 
     public static String getCommand() {

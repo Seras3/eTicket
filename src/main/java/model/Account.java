@@ -1,10 +1,12 @@
 package model;
 
-import lombok.Data;
+import lombok.*;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Account {
-    private Long id;
+    private Integer id;
     private String email;
     private String password;
     private Integer role_id;
@@ -21,13 +23,4 @@ public class Account {
         this.password = password;
         this.role_id = role_id;
     }
-
-    public Account(Long id, String email, String password, Integer role_id) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.role_id = role_id;
-    }
-
-    public Account() { }
 }

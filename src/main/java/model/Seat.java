@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Location {
+public class Seat {
     private Integer id;
-    private String country;
-    private String city;
-    private String details;
+    private Integer row_ord;
+    private Integer place;
 }

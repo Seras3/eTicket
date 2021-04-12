@@ -1,16 +1,18 @@
 import dao.AccountDAO;
+import dao.EventDAO;
+import dto.EventDTO;
 import mapper.AccountMapper;
+import mapper.EventMapper;
 import model.Account;
+import model.Event;
+import service.API;
+import service.Identity;
 
-import java.util.HashMap;
 
 public class Test {
     public static void main(String[] args) {
-        AccountDAO account_dao = new AccountDAO();
-        Account account = account_dao.find(new HashMap<String, Object>() {{
-            put("id", 1);
-        }});
+        API api = new API(new Identity(1, "cineva", 1));
+        //System.out.println(api.getEvents());
 
-        System.out.println(AccountMapper.INSTANCE.toRecord(account));
     }
 }

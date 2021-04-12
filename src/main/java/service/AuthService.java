@@ -42,7 +42,7 @@ public class AuthService {
         if(account != null) {
             return Result.USER_EXISTS;
         }
-        Account new_account = AccountMapper.INSTANCE.fromRecord(input);
+        Account new_account = AccountMapper.INSTANCE.fromAuthDTO(input);
         new_account.setRole_id(2);   // USER
         account_dao.add(new_account);
         return Result.REGISTER_SUCCESS;

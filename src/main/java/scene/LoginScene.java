@@ -17,9 +17,11 @@ public class LoginScene extends Scene{
 
     public void run() {
         GUI.sceneTitle(this.title);
+
         AccountAuthDTO inputAccount = GUI.getAuth();
         AuthService.Result result = auth_service.login(inputAccount);
         GUI.authResponse(auth_service.login(inputAccount));
+
         if(result == AuthService.Result.LOGIN_SUCCESS) {
             GUI.welcome(Context.getIdentity().getEmail());
             new MenuScene().run();

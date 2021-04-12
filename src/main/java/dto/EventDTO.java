@@ -1,4 +1,4 @@
-package model;
+package dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,16 +7,16 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Event {
+public class EventDTO {
     private Integer id;
     private String name;
     private String description;
     private Integer category_id;
 
-
-    public Event(String name, String description, Integer category_id) {
-        this.name = name;
-        this.description = description;
-        this.category_id = category_id;
+    public EventDTO(EventDTO event) {
+        this.id = event.getId();
+        this.name = event.getName();
+        this.description = event.getDescription();
+        this.category_id = event.getCategory_id();
     }
 }

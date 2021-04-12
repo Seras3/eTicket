@@ -1,8 +1,6 @@
 package scene;
 
 import graphic.GUI;
-import service.Context;
-import service.Identity;
 import util.Command;
 
 import java.util.HashMap;
@@ -17,28 +15,28 @@ public class AuthScene extends Scene {
 
         commands.put("/login", new Command(3, 
                 Command.GenerateAccessibilityFor.Everyone(),
-                "/login", "Login yourself.", () -> {
+                "/login", "Login yourself.", (args) -> {
             new LoginScene().run();
             return Command.Result.OK;
         }));
 
         commands.put("/register", new Command(2,
                 Command.GenerateAccessibilityFor.Everyone(),
-                "/register", "Register if you don't have an account.", () -> {
+                "/register", "Register if you don't have an account.", (args) -> {
             new RegisterScene().run();
             return Command.Result.OK;
         }));
 
         commands.put("/help", new Command(1,
                 Command.GenerateAccessibilityFor.Everyone(),
-                "/help", "Show commands list.", () -> {
+                "/help", "Show commands list.", (args) -> {
             GUI.help(commands);
             return Command.Result.OK;
         }));
 
         commands.put("/exit", new Command(0,
                 Command.GenerateAccessibilityFor.Everyone(),
-                "/exit", "Exit.", () -> Command.Result.SHOULD_EXIT
+                "/exit", "Exit.", (args) -> Command.Result.SHOULD_EXIT
         ));
     }
 

@@ -6,13 +6,13 @@ import model.Account;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2021-04-11T18:25:29+0300",
+    date = "2021-04-12T12:31:17+0300",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 15.0.2 (Oracle Corporation)"
 )
 public class AccountMapperImpl implements AccountMapper {
 
     @Override
-    public Account fromRecord(AccountAuthDTO record) {
+    public Account fromAuthDTO(AccountAuthDTO record) {
         if ( record == null ) {
             return null;
         }
@@ -26,7 +26,7 @@ public class AccountMapperImpl implements AccountMapper {
     }
 
     @Override
-    public AccountAuthDTO toRecord(Account model) {
+    public AccountAuthDTO toAuthDTO(Account model) {
         if ( model == null ) {
             return null;
         }

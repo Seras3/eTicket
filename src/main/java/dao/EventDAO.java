@@ -1,6 +1,6 @@
 package dao;
 
-import model.Account;
+import model.Event;
 import service.Database;
 
 import java.sql.*;
@@ -9,42 +9,41 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-public class AccountDAO implements DAO<Account> {
+public class EventDAO implements DAO<Event> {
     private Database db;
 
-    public AccountDAO() {
+    public EventDAO() {
         db = Database.getInstance();
     }
 
-    private Account getAccount(ResultSet result) throws SQLException {
+    private Event getEvent(ResultSet result) throws SQLException {
         if(result.next()) {
-            Account account = new Account();
+            Event event = new Event();
 
-            account.setId(result.getInt("id"));
-            account.setEmail(result.getString("email"));
-            account.setPassword(result.getString("password"));
-            account.setRole_id(result.getInt("role_id"));
+            event.setId(result.getInt("id"));
+            event.setName(result.getString("name"));
+            event.setDescription(result.getString("description"));
+            event.setCategory_id(result.getInt("category_id"));
 
-            return account;
+            return event;
         }
         return null;
     }
 
-    public Account find(HashMap<String, Object> params) {
+    public Event find(HashMap<String, Object> params) {
         if(params.isEmpty())
             return null;
 
         Connection connection = db.getConnection();
 
         try {
-            StringBuilder sql = new StringBuilder("SELECT * FROM account WHERE ");
+            StringBuilder sql = new StringBuilder("SELECT * FROM event WHERE ");
             for(Map.Entry<String, Object> entry : params.entrySet()) {
                 Object value = entry.getValue();
                 if(value instanceof String) {
                     sql.append(entry.getKey()).append("='").append(value).append("' AND ");
                 } else
-                    if(value instanceof Number) {
+                if(value instanceof Number) {
                     sql.append(entry.getKey()).append("=").append(value).append(" AND ");
                 }
             }
@@ -55,8 +54,8 @@ public class AccountDAO implements DAO<Account> {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql.toString());
 
-            Account account = getAccount(result);
-            if (account != null) return account;
+            Event event = getEvent(result);
+            if (event != null) return event;
 
 
         } catch (SQLException throwables) {
@@ -67,15 +66,15 @@ public class AccountDAO implements DAO<Account> {
     }
 
     @Override
-    public Account get(String id) {
+    public Event get(String id) {
         Connection connection = db.getConnection();
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery("SELECT * FROM account WHERE id=" + id);
+            ResultSet result = statement.executeQuery("SELECT * FROM event WHERE id=" + id);
 
-            Account account = getAccount(result);
-            if (account != null) return account;
+            Event event = getEvent(result);
+            if (event != null) return event;
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -84,26 +83,26 @@ public class AccountDAO implements DAO<Account> {
     }
 
     @Override
-    public List<Account> getAll() {
+    public List<Event> getAll() {
         Connection connection = db.getConnection();
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery("SELECT * FROM account");
+            ResultSet result = statement.executeQuery("SELECT * FROM event");
 
-            List<Account> accounts = new ArrayList<Account>();
+            List<Event> events = new ArrayList<Event>();
 
             while(result.next()) {
-                Account account = new Account();
+                Event event = new Event();
 
-                account.setId(result.getInt("id"));
-                account.setEmail(result.getString("email"));
-                account.setPassword(result.getString("password"));
-                account.setRole_id(result.getInt("role_id"));
+                event.setId(result.getInt("id"));
+                event.setName(result.getString("name"));
+                event.setDescription(result.getString("description"));
+                event.setCategory_id(result.getInt("category_id"));
 
-                accounts.add(account);
+                events.add(event);
             }
-            return accounts;
+            return events;
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -113,13 +112,13 @@ public class AccountDAO implements DAO<Account> {
     }
 
     @Override
-    public boolean add(Account account) {
+    public boolean add(Event event) {
         Connection connection = db.getConnection();
         try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO account VALUES (NULL, ?, ?, ?)");
-            ps.setString(1, account.getEmail());
-            ps.setString(2, account.getPassword());
-            ps.setInt(3, account.getRole_id());
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO event VALUES (NULL, ?, ?, ?)");
+            ps.setString(1, event.getName());
+            ps.setString(2, event.getDescription());
+            ps.setInt(3, event.getCategory_id());
 
             if(ps.executeUpdate() == 1) {
                 return true;
@@ -133,14 +132,14 @@ public class AccountDAO implements DAO<Account> {
     }
 
     @Override
-    public boolean update(Account account) {
+    public boolean update(Event event) {
         Connection connection = db.getConnection();
         try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE account SET email=?, password=?, role_id=? WHERE id=?");
-            ps.setString(1, account.getEmail());
-            ps.setString(2, account.getPassword());
-            ps.setInt(3, account.getRole_id());
-            ps.setInt(4, account.getId());
+            PreparedStatement ps = connection.prepareStatement("UPDATE event SET name=?, description=?, category_id=? WHERE id=?");
+            ps.setString(1, event.getName());
+            ps.setString(2, event.getDescription());
+            ps.setInt(3, event.getCategory_id());
+            ps.setInt(4, event.getId());
 
             if(ps.executeUpdate() == 1) {
                 return true;
@@ -154,12 +153,12 @@ public class AccountDAO implements DAO<Account> {
     }
 
     @Override
-    public boolean delete(Account account) {
+    public boolean delete(Event event) {
         Connection connection = db.getConnection();
 
         try {
-            PreparedStatement ps = connection.prepareStatement("DELETE FROM account WHERE id=?");
-            ps.setLong(1, account.getId());
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM event WHERE id=?");
+            ps.setLong(1, event.getId());
 
             if(ps.executeUpdate() == 1) {
                 return true;
@@ -171,5 +170,4 @@ public class AccountDAO implements DAO<Account> {
 
         return false;
     }
-
 }

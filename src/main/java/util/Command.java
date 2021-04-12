@@ -2,7 +2,9 @@ package util;
 
 import service.Identity;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -11,7 +13,7 @@ public class Command implements Comparable<Command> {
     private List<Identity.Role> access_list;
     private String name;
     private String description;
-    private Callable<Command.Result> commandFunction;
+    private CommandAction<Command.Result> commandFunction;
 
     @Override
     public int compareTo(Command obj) {
@@ -23,7 +25,7 @@ public class Command implements Comparable<Command> {
         SHOULD_EXIT
     }
 
-    public Command(int display_priority, List<Identity.Role> access_list, String name, String description, Callable<Command.Result> commandFunction) {
+    public Command(int display_priority, List<Identity.Role> access_list, String name, String description, CommandAction<Command.Result> commandFunction) {
         this.display_priority = display_priority;
         this.access_list = access_list;
         this.name = name;
@@ -36,8 +38,12 @@ public class Command implements Comparable<Command> {
     public int getDisplayPriority() { return display_priority; }
     public List<Identity.Role> getAccessList() { return access_list; }
 
-    public Command.Result call() throws Exception{
-        return commandFunction.call();
+    public Command.Result call(String[] args) {
+        HashMap<String, String> map_args = new HashMap<>();
+        for(int i = 1; i < args.length; i+=2) {
+            map_args.put(args[i - 1], args[i]);
+        }
+        return commandFunction.call(map_args);
     }
 
     public static class GenerateAccessibilityFor {

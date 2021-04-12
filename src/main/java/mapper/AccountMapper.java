@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 public interface AccountMapper {
     AccountMapper INSTANCE = Mappers.getMapper( AccountMapper.class );
 
-    Account fromRecord(AccountAuthDTO record);
+    Account fromAuthDTO(AccountAuthDTO record);
 
-    AccountAuthDTO toRecord(Account model);
+    AccountAuthDTO toAuthDTO(Account model);
 }
