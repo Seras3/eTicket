@@ -1,7 +1,7 @@
 package util;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public interface CommandAction<T> {
-    T call(HashMap<String, String> args);
+    T call(Map<String, String> args);
 }

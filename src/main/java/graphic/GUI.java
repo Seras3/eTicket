@@ -30,7 +30,7 @@ public class GUI {
         System.out.println("Enter command:");
     }
 
-    public static void help(HashMap<String, Command> commands) {
+    public static void help(Map<String, Command> commands) {
         List<Command> display_list = new ArrayList(commands.values());
         Collections.sort(display_list);
         display_list.forEach(obj -> System.out.println(GUI.commandToString(obj)));
@@ -121,7 +121,7 @@ public class GUI {
         System.out.print("Description: ");
         event.setDescription(scan.nextLine());
         System.out.print("Category id: ");
-        event.setCategory_id(Integer.valueOf(scan.nextLine()));
+        event.setCategoryId(Integer.valueOf(scan.nextLine()));
         return event;
     }
 

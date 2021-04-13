@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-    private Integer account_id;
+    private Integer accountId;
     private String name;
-    private LocalDate birth_date;
+    private LocalDate birthDate;
 }

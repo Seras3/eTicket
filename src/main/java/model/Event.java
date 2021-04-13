@@ -11,12 +11,12 @@ public class Event {
     private Integer id;
     private String name;
     private String description;
-    private Integer category_id;
+    private Integer categoryId;
 
 
-    public Event(String name, String description, Integer category_id) {
+    public Event(String name, String description, Integer categoryId) {
         this.name = name;
         this.description = description;
-        this.category_id = category_id;
+        this.categoryId = categoryId;
     }
 }

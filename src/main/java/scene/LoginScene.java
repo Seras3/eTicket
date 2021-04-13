@@ -4,7 +4,7 @@ package scene;
 import graphic.GUI;
 import dto.AccountAuthDTO;
 import service.AuthService;
-import service.Context;
+import context.Context;
 
 
 public class LoginScene extends Scene{

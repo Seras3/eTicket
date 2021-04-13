@@ -1,16 +1,17 @@
 package scene;
 
 import graphic.GUI;
-import service.Context;
+import context.Context;
 import util.Command;
 import util.Filter;
 
 
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class MenuScene extends Scene{
-    private HashMap<String, Command> commands;
+    private Map<String, Command> commands;
 
     public MenuScene() {
         super("Menu");

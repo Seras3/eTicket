@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Seat {
     private Integer id;
-    private Integer row_ord;
+    private Integer rowOrd;
     private Integer place;
 }

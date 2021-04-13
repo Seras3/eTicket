@@ -1,5 +1,7 @@
 package service;
 
+import context.Context;
+import context.Identity;
 import dao.AccountDAO;
 import dto.AccountAuthDTO;
 import mapper.AccountMapper;
@@ -30,7 +32,7 @@ public class AuthService {
         if(account == null)
             return Result.NOT_FOUND;
 
-        Context.setIdentity(new Identity(account.getId(), account.getEmail(), account.getRole_id()));
+        Context.setIdentity(new Identity(account.getId(), account.getEmail(), account.getRoleId()));
         return Result.LOGIN_SUCCESS;
     }
 
@@ -42,8 +44,8 @@ public class AuthService {
         if(account != null) {
             return Result.USER_EXISTS;
         }
-        Account new_account = AccountMapper.INSTANCE.fromAuthDTO(input);
-        new_account.setRole_id(2);   // USER
+        Account new_account = AccountMapper.INSTANCE.authDtoToAccount(input);
+        new_account.setRoleId(2);   // USER
         account_dao.add(new_account);
         return Result.REGISTER_SUCCESS;
     }

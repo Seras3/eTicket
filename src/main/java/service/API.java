@@ -1,6 +1,7 @@
 package service;
 
 
+import context.Identity;
 import dao.EventDAO;
 import dto.EventDTO;
 import dto.EventRowDTO;
@@ -30,29 +31,29 @@ public class API {
     public List<EventRowDTO> getEvents() {
         List<EventRowDTO> events_dto_list = new ArrayList<EventRowDTO>();
         for(Event event : event_dao.getAll()) {
-            events_dto_list.add(EventMapper.INSTANCE.toEventRowDTO(event));
+            events_dto_list.add(EventMapper.INSTANCE.eventToEventRowDto(event));
         }
         return events_dto_list;
     }
 
     public EventDTO getEvent(Integer id) {
-        return EventMapper.INSTANCE.toEventDTO(event_dao.get(id.toString()));
+        return EventMapper.INSTANCE.eventToEventDto(event_dao.get(id.toString()));
     }
 
     public Result postEvent(EventDTO event) {
-        event_dao.add(EventMapper.INSTANCE.fromEventDTO(event));
+        event_dao.add(EventMapper.INSTANCE.eventDtoToEvent(event));
         return Result.OK;
     }
 
     public Result putEvent(EventDTO event) {
-        event_dao.update(EventMapper.INSTANCE.fromEventDTO(event));
+        event_dao.update(EventMapper.INSTANCE.eventDtoToEvent(event));
         return Result.OK;
     }
 
     public Result deleteEvent(Integer id) {
         EventDTO event = new EventDTO();
         event.setId(id);
-        event_dao.delete(EventMapper.INSTANCE.fromEventDTO(event));
+        event_dao.delete(EventMapper.INSTANCE.eventDtoToEvent(event));
         return Result.OK;
     }
 }

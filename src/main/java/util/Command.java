@@ -1,12 +1,11 @@
 package util;
 
-import service.Identity;
+import context.Identity;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 public class Command implements Comparable<Command> {
     private int display_priority;
@@ -39,7 +38,7 @@ public class Command implements Comparable<Command> {
     public List<Identity.Role> getAccessList() { return access_list; }
 
     public Command.Result call(String[] args) {
-        HashMap<String, String> map_args = new HashMap<>();
+        Map<String, String> map_args = new HashMap<>();
         for(int i = 1; i < args.length; i+=2) {
             map_args.put(args[i - 1], args[i]);
         }

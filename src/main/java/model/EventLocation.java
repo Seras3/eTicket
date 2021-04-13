@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class EventLocation {
     private Integer id;
-    private Integer event_id;
-    private Integer location_id;
-    private LocalDateTime start_date;
-    private LocalDateTime end_date;
+    private Integer eventId;
+    private Integer locationId;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 }

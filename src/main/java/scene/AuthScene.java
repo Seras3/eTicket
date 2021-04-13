@@ -4,9 +4,10 @@ import graphic.GUI;
 import util.Command;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class AuthScene extends Scene {
-    private HashMap<String, Command> commands;
+    private Map<String, Command> commands;
 
     public AuthScene() {
         super("Authentication");

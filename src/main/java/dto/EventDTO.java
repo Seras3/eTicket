@@ -11,12 +11,12 @@ public class EventDTO {
     private Integer id;
     private String name;
     private String description;
-    private Integer category_id;
+    private Integer categoryId;
 
     public EventDTO(EventDTO event) {
         this.id = event.getId();
         this.name = event.getName();
         this.description = event.getDescription();
-        this.category_id = event.getCategory_id();
+        this.categoryId = event.getCategoryId();
     }
 }

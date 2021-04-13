@@ -3,14 +3,15 @@ package scene;
 import dto.EventDTO;
 import graphic.GUI;
 import service.API;
-import service.Context;
+import context.Context;
 import util.Command;
 import util.Filter;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class EventShowScene extends Scene {
-    private HashMap<String, Command> commands;
+    private Map<String, Command> commands;
     private API api;
     private EventDTO event;
 
@@ -38,7 +39,7 @@ public class EventShowScene extends Scene {
                 switch(key) {
                     case "-name" -> new_event.setName(args.get(key).replace('_', ' '));
                     case "-description" -> new_event.setDescription(args.get(key).replace('_', ' '));
-                    case "-category" -> new_event.setCategory_id(Integer.valueOf(args.get(key)));
+                    case "-category" -> new_event.setCategoryId(Integer.valueOf(args.get(key)));
                     default -> GUI.invalidCommandParameter(key);
                 }
             }

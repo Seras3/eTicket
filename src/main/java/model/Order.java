@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Order {
     private Integer id;
-    private Integer account_id;
-    private Integer ticket_id;
-    private LocalDateTime buy_date;
+    private Integer accountId;
+    private Integer ticketId;
+    private LocalDateTime buyDate;
 }

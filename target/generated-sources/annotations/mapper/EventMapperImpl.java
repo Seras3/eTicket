@@ -7,13 +7,13 @@ import model.Event;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2021-04-12T12:31:17+0300",
+    date = "2021-04-13T13:57:30+0300",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 15.0.2 (Oracle Corporation)"
 )
 public class EventMapperImpl implements EventMapper {
 
     @Override
-    public Event fromEventDTO(EventDTO record) {
+    public Event eventDtoToEvent(EventDTO record) {
         if ( record == null ) {
             return null;
         }
@@ -23,13 +23,13 @@ public class EventMapperImpl implements EventMapper {
         event.setId( record.getId() );
         event.setName( record.getName() );
         event.setDescription( record.getDescription() );
-        event.setCategory_id( record.getCategory_id() );
+        event.setCategoryId( record.getCategoryId() );
 
         return event;
     }
 
     @Override
-    public Event fromEventRowDTO(EventRowDTO record) {
+    public Event eventRowDtoToEvent(EventRowDTO record) {
         if ( record == null ) {
             return null;
         }
@@ -44,7 +44,7 @@ public class EventMapperImpl implements EventMapper {
     }
 
     @Override
-    public EventDTO toEventDTO(Event model) {
+    public EventDTO eventToEventDto(Event model) {
         if ( model == null ) {
             return null;
         }
@@ -54,13 +54,13 @@ public class EventMapperImpl implements EventMapper {
         eventDTO.setId( model.getId() );
         eventDTO.setName( model.getName() );
         eventDTO.setDescription( model.getDescription() );
-        eventDTO.setCategory_id( model.getCategory_id() );
+        eventDTO.setCategoryId( model.getCategoryId() );
 
         return eventDTO;
     }
 
     @Override
-    public EventRowDTO toEventRowDTO(Event model) {
+    public EventRowDTO eventToEventRowDto(Event model) {
         if ( model == null ) {
             return null;
         }

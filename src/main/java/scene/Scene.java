@@ -5,7 +5,7 @@ import util.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 public abstract class Scene {
@@ -19,7 +19,7 @@ public abstract class Scene {
     abstract public void run();
 
 
-    protected void listenCommand(HashMap<String, Command> commands) {
+    protected void listenCommand(Map<String, Command> commands) {
         this.listening = true;
         while(listening) {
             GUI.sceneTitle(title);
@@ -32,7 +32,7 @@ public abstract class Scene {
             if (commands.containsKey(command_name)) {
                 try {
                     command_result = commands.get(command_name).call(args);
-                    if(command_result == Command.Result.SHOULD_EXIT) { listening = false; }
+                    if(command_result.equals(Command.Result.SHOULD_EXIT)) { listening = false; }
 
                 } catch (Exception e) { GUI.exception(e); }
 

@@ -1,4 +1,4 @@
-package service;
+package context;
 
 public class Context {
     private static Identity user;

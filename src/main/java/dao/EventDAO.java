@@ -1,62 +1,52 @@
 package dao;
 
 import model.Event;
-import service.Database;
+import config.DatabaseConfig;
+import util.Converter;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.List;
+
 
 public class EventDAO implements DAO<Event> {
-    private Database db;
+    private DatabaseConfig db;
 
     public EventDAO() {
-        db = Database.getInstance();
+        db = DatabaseConfig.getInstance();
     }
 
     private Event getEvent(ResultSet result) throws SQLException {
-        if(result.next()) {
-            Event event = new Event();
+        Event event = new Event();
 
-            event.setId(result.getInt("id"));
-            event.setName(result.getString("name"));
-            event.setDescription(result.getString("description"));
-            event.setCategory_id(result.getInt("category_id"));
+        event.setId(result.getInt("id"));
+        event.setName(result.getString("name"));
+        event.setDescription(result.getString("description"));
+        event.setCategoryId(result.getInt("category_id"));
 
-            return event;
-        }
-        return null;
+        return event;
     }
 
-    public Event find(HashMap<String, Object> params) {
+    private void fillPreparedStatement(PreparedStatement ps, Event event) throws SQLException {
+        ps.setString(1, event.getName());
+        ps.setString(2, event.getDescription());
+        ps.setInt(3, event.getCategoryId());
+    }
+
+    public Event find(Map<String, Object> params) {
         if(params.isEmpty())
             return null;
 
         Connection connection = db.getConnection();
 
         try {
-            StringBuilder sql = new StringBuilder("SELECT * FROM event WHERE ");
-            for(Map.Entry<String, Object> entry : params.entrySet()) {
-                Object value = entry.getValue();
-                if(value instanceof String) {
-                    sql.append(entry.getKey()).append("='").append(value).append("' AND ");
-                } else
-                if(value instanceof Number) {
-                    sql.append(entry.getKey()).append("=").append(value).append(" AND ");
-                }
-            }
-            sql.delete(sql.length() - 4, sql.length());
-
-
-
             Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(sql.toString());
+            ResultSet result = statement.executeQuery(Converter.MapToSqlFindString(params, "event"));
 
-            Event event = getEvent(result);
-            if (event != null) return event;
-
+            if(result.next()) {
+                return getEvent(result);
+            }
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -73,8 +63,9 @@ public class EventDAO implements DAO<Event> {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM event WHERE id=" + id);
 
-            Event event = getEvent(result);
-            if (event != null) return event;
+            if(result.next()) {
+                return getEvent(result);
+            }
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -93,15 +84,9 @@ public class EventDAO implements DAO<Event> {
             List<Event> events = new ArrayList<Event>();
 
             while(result.next()) {
-                Event event = new Event();
-
-                event.setId(result.getInt("id"));
-                event.setName(result.getString("name"));
-                event.setDescription(result.getString("description"));
-                event.setCategory_id(result.getInt("category_id"));
-
-                events.add(event);
+                events.add(getEvent(result));
             }
+
             return events;
 
         } catch (SQLException throwables) {
@@ -116,9 +101,7 @@ public class EventDAO implements DAO<Event> {
         Connection connection = db.getConnection();
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO event VALUES (NULL, ?, ?, ?)");
-            ps.setString(1, event.getName());
-            ps.setString(2, event.getDescription());
-            ps.setInt(3, event.getCategory_id());
+            fillPreparedStatement(ps, event);
 
             if(ps.executeUpdate() == 1) {
                 return true;
@@ -136,9 +119,7 @@ public class EventDAO implements DAO<Event> {
         Connection connection = db.getConnection();
         try {
             PreparedStatement ps = connection.prepareStatement("UPDATE event SET name=?, description=?, category_id=? WHERE id=?");
-            ps.setString(1, event.getName());
-            ps.setString(2, event.getDescription());
-            ps.setInt(3, event.getCategory_id());
+            fillPreparedStatement(ps, event);
             ps.setInt(4, event.getId());
 
             if(ps.executeUpdate() == 1) {

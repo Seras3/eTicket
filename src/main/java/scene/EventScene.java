@@ -3,14 +3,15 @@ package scene;
 import dto.EventDTO;
 import graphic.GUI;
 import service.API;
-import service.Context;
+import context.Context;
 import util.Command;
 import util.Filter;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class EventScene extends Scene {
-    private HashMap<String, Command> commands;
+    private Map<String, Command> commands;
     private API api;
 
     public EventScene() {

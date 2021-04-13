@@ -2,15 +2,16 @@ package scene;
 
 import graphic.GUI;
 import service.API;
-import service.Context;
+import context.Context;
 import util.Command;
 import util.Filter;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class CartScene extends Scene {
     private API api;
-    private HashMap<String, Command> commands;
+    private Map<String, Command> commands;
 
     public CartScene() {
         super("Cart menu");

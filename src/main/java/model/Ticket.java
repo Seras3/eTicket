@@ -9,8 +9,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Ticket {
     private Integer id;
-    private Integer event_id;
+    private Integer eventId;
     private Float price;
-    private Integer seat_id;
+    private Integer seatId;
     private String description;
+    private String name;
+
+    public Ticket(Ticket ob) {
+        this.id = ob.getId();
+        this.eventId = ob.getEventId();
+        this.price = ob.getPrice();
+        this.seatId = ob.getSeatId();
+        this.description = ob.getDescription();
+        this.name = ob.getName();
+    }
 }
