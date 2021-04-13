@@ -41,7 +41,8 @@ public class OrderDAO implements DAO<Order> {
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(Converter.MapToSqlFindString(params, "order"));
+            String sql = "SELECT * FROM order";
+            ResultSet result = statement.executeQuery(Converter.addWhereFiltersToSql(sql, params));
 
             if(result.next()){
                 return getOrder(result);
@@ -62,7 +63,8 @@ public class OrderDAO implements DAO<Order> {
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(Converter.MapToSqlFindString(params, "order"));
+            String sql = "SELECT * FROM order";
+            ResultSet result = statement.executeQuery(Converter.addWhereFiltersToSql(sql, params));
 
             List<Order> orders = new ArrayList<Order>();
 

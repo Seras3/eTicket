@@ -8,14 +8,12 @@ import java.util.HashMap;
 public class EventRepository implements Repository<EventCompact> {
     private EventDAO event_dao;
     private LocationDAO location_dao;
-    private TicketRepository ticket_repo;
     private EventCategoryDAO event_category_dao;
     private EventLocationDAO event_location_dao;
 
     public EventRepository() {
         this.event_dao = new EventDAO();
         this.location_dao = new LocationDAO();
-        this.ticket_repo = new TicketRepository();
         this.event_category_dao = new EventCategoryDAO();
         this.event_location_dao = new EventLocationDAO();
 
@@ -36,10 +34,6 @@ public class EventRepository implements Repository<EventCompact> {
 
         event.setCategory(event_category_dao.find(new HashMap<String, Object>() {{
             put("id", event.getEvent().getCategoryId().toString());
-        }}));
-
-        event.setTickets(ticket_repo.findAll(new HashMap<String, Object>() {{
-            put("event_id", event.getEventLocation().getEventId().toString());
         }}));
 
         return event;

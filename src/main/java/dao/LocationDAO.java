@@ -44,7 +44,8 @@ public class LocationDAO implements DAO<Location> {
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(Converter.MapToSqlFindString(params, "location"));
+            String sql = "SELECT * FROM location";
+            ResultSet result = statement.executeQuery(Converter.addWhereFiltersToSql(sql, params));
 
             if(result.next()) {
                 return getLocation(result);

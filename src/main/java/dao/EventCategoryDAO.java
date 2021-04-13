@@ -33,7 +33,8 @@ public class EventCategoryDAO implements DAO<EventCategory> {
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(Converter.MapToSqlFindString(params, "event_category"));
+            String sql = "SELECT * FROM event_category";
+            ResultSet result = statement.executeQuery(Converter.addWhereFiltersToSql(sql, params));
 
             if(result.next()) {
                 return getCategory(result);

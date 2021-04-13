@@ -6,6 +6,7 @@ import util.Converter;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
@@ -31,6 +32,31 @@ public class SeatDAO implements DAO<Seat> {
         ps.setInt(2, seat.getPlace());
     }
 
+    public Seat findForTicket(String eventId, String ticketName, Map<String, Object> params) {
+        if(params.isEmpty())
+            return null;
+
+        Connection connection = db.getConnection();
+
+        try {
+            Statement statement = connection.createStatement();
+            String sql = "SELECT s.id as id, row_ord, place " +
+                    "FROM ticket t JOIN seat s ON (t.seat_id = s.id)";
+            sql = Converter.addWhereFiltersToSql(sql, params);
+            sql += " AND t.event_id = " + eventId + " AND t.name = '" + ticketName + "'";
+            ResultSet result = statement.executeQuery(sql);
+
+            if(result.next()){
+                return getSeat(result);
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return null;
+    }
+
     public Seat find(Map<String, Object> params) {
         if(params.isEmpty())
             return null;
@@ -39,7 +65,8 @@ public class SeatDAO implements DAO<Seat> {
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(Converter.MapToSqlFindString(params, "seat"));
+            String sql = "SELECT * FROM seat";
+            ResultSet result = statement.executeQuery(Converter.addWhereFiltersToSql(sql, params));
 
             if(result.next()){
                 return getSeat(result);

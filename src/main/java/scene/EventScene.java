@@ -41,7 +41,7 @@ public class EventScene extends Scene {
                 "/show", "Show event with -id x.", (args) -> {
             for (String key : args.keySet()) {
                 switch(key) {
-                    case "-id" -> new EventShowScene(Integer.valueOf(args.get(key))).run();
+                    case "-id" -> new EventShowScene(args.get(key)).run();
                     default -> GUI.invalidCommandParameter(key);
                 }
             }

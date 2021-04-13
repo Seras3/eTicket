@@ -52,10 +52,13 @@ public class Converter {
         return dateFormat.format(date);
     }
 
-    public static String MapToSqlFindString(Map<String, Object> params, String table){
-        StringBuilder sql = new StringBuilder("SELECT * FROM " + table +" WHERE ");
+    public static String addWhereFiltersToSql(String statement, Map<String, Object> params){
+
+        StringBuilder sql = new StringBuilder(statement + " WHERE ");
+
         for(Map.Entry<String, Object> entry : params.entrySet()) {
             Object value = entry.getValue();
+
             if(value instanceof String) {
                 sql.append(entry.getKey()).append("='").append(value).append("' AND ");
             } else
@@ -67,7 +70,9 @@ public class Converter {
                 sql.append(entry.getKey()).append("='").append(value).append("' AND ");
             }
         }
+
         sql.delete(sql.length() - 4, sql.length());
+
         return sql.toString();
     }
 }

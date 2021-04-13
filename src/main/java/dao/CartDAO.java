@@ -38,7 +38,8 @@ public class CartDAO implements DAO<Cart> {
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(Converter.MapToSqlFindString(params, "cart"));
+            String sql = "SELECT * FROM cart";
+            ResultSet result = statement.executeQuery(Converter.addWhereFiltersToSql(sql, params));
 
             if(result.next()){
                 return getCart(result);
@@ -59,7 +60,8 @@ public class CartDAO implements DAO<Cart> {
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(Converter.MapToSqlFindString(params, "cart"));
+            String sql = "SELECT * FROM cart";
+            ResultSet result = statement.executeQuery(Converter.addWhereFiltersToSql(sql, params));
 
             List<Cart> carts = new ArrayList<Cart>();
 

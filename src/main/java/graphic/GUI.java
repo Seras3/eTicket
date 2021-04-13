@@ -1,8 +1,6 @@
 package graphic;
 
-import dto.AccountAuthDTO;
-import dto.EventDTO;
-import dto.EventRowDTO;
+import dto.*;
 import service.API;
 import service.AuthService;
 import util.Command;
@@ -57,6 +55,10 @@ public class GUI {
         System.out.println(e.getMessage());
     }
 
+    public static void allParamsRequired() {
+        System.out.println("All parameters are required.");
+    }
+
     public static void authResponse(AuthService.Result auth_result) {
         switch(auth_result) {
             case REGISTER_SUCCESS:
@@ -92,6 +94,17 @@ public class GUI {
         System.out.println(String.format("Hello, %s! :D", user));
     }
 
+    public static void ticketsList(List<TicketRowDTO> tickets) {
+        for(TicketRowDTO ticket : tickets) {
+            System.out.println(ticket.getName() + " ( " + ticket.getPrice() +" RON )" + " - " + ticket.getCount() + " tickets");
+            if(ticket.isSeat()) {
+                System.out.println("(Pick seat)");
+            }
+            System.out.println(ticket.getDescription());
+            System.out.println();
+        }
+    }
+
     public static void eventsList(List<EventRowDTO> events) {
         for(EventRowDTO event : events) {
             System.out.println("~~~~~~~~~~~~~~~~~ ("+ event.getId() +") " + event.getName() + " ~~~~~~~~~~~~~~~~~");
@@ -111,8 +124,8 @@ public class GUI {
         return scan.nextLine().equals("Y");
     }
 
-    public static void eventNotFound() {
-        System.out.println("Event not found.");
+    public static void NotFound(String msg) {
+        System.out.println(msg + " not found.");
     }
 
     public static EventDTO getEvent(EventDTO event) {
@@ -123,6 +136,18 @@ public class GUI {
         System.out.print("Category id: ");
         event.setCategoryId(Integer.valueOf(scan.nextLine()));
         return event;
+    }
+
+    public static SeatDTO getSeat() {
+        SeatDTO input = new SeatDTO();
+
+        System.out.print("row: ");
+        input.setRowOrd(Integer.valueOf(scan.nextLine()));
+
+        System.out.print("place: ");
+        input.setPlace(Integer.valueOf(scan.nextLine()));
+
+        return input;
     }
 
     public static String getCommand() {

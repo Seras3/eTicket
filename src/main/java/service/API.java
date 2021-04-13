@@ -2,22 +2,29 @@ package service;
 
 
 import context.Identity;
+import dao.CartDAO;
 import dao.EventDAO;
-import dto.EventDTO;
-import dto.EventRowDTO;
+import dto.*;
 import mapper.EventMapper;
-import model.Event;
+import mapper.TicketMapper;
+import model.*;
+import repository.TicketRepository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class API {
     private Identity identity;
-    private EventDAO event_dao;
+    private EventDAO eventDao;
+    private TicketRepository ticketRepository;
+    private CartDAO cartDao;
 
     public API(Identity identity) {
         this.identity = identity;
-        this.event_dao = new EventDAO();
+        this.eventDao = new EventDAO();
+        this.ticketRepository = new TicketRepository();
+        this.cartDao = new CartDAO();
     }
 
     public enum Result {
@@ -28,32 +35,78 @@ public class API {
 
 
 
+    public List<TicketRowDTO> getTicketRowsForEvent(String id) {
+        List<TicketRow> tickets = ticketRepository.findAllTicketRows(new HashMap<>(){{
+            put("event_id", Integer.parseInt(id));
+        }});
+
+        List<TicketRowDTO> ticketRowDtos = new ArrayList<>();
+
+        for(TicketRow ticket : tickets) {
+            ticketRowDtos.add(TicketMapper.INSTANCE.ticketRowToTicketRowDto(ticket));
+        }
+
+        return ticketRowDtos;
+    }
+
+    public TicketDTO getTicketForEvent(String id, String name) {
+        Ticket ticket = ticketRepository.find(new HashMap<String, Object>() {{
+            put("event_id", Integer.valueOf(id));
+            put("name", name);
+        }});
+
+        if(ticket instanceof SeatTicket)
+            return TicketMapper.INSTANCE.seatTicketToTicketDto((SeatTicket)ticket);
+
+        return TicketMapper.INSTANCE.ticketToTicketDto(ticket);
+    }
+
+    public TicketDTO getTicketForEvent(String id, String name, SeatDTO seat) {
+        SeatTicket ticket = ticketRepository.find(new HashMap<String, Object>() {{
+            put("event_id", Integer.valueOf(id));
+            put("name", name);
+        }}, new HashMap<>() {{
+            put("row_ord", seat.getRowOrd());
+            put("place", seat.getPlace());
+        }});
+
+        return TicketMapper.INSTANCE.seatTicketToTicketDto(ticket);
+    }
+
+
     public List<EventRowDTO> getEvents() {
         List<EventRowDTO> events_dto_list = new ArrayList<EventRowDTO>();
-        for(Event event : event_dao.getAll()) {
+        for(Event event : eventDao.getAll()) {
             events_dto_list.add(EventMapper.INSTANCE.eventToEventRowDto(event));
         }
         return events_dto_list;
     }
 
-    public EventDTO getEvent(Integer id) {
-        return EventMapper.INSTANCE.eventToEventDto(event_dao.get(id.toString()));
+    public EventDTO getEvent(String id) {
+        return EventMapper.INSTANCE.eventToEventDto(eventDao.get(id.toString()));
     }
 
     public Result postEvent(EventDTO event) {
-        event_dao.add(EventMapper.INSTANCE.eventDtoToEvent(event));
+        eventDao.add(EventMapper.INSTANCE.eventDtoToEvent(event));
         return Result.OK;
     }
 
     public Result putEvent(EventDTO event) {
-        event_dao.update(EventMapper.INSTANCE.eventDtoToEvent(event));
+        eventDao.update(EventMapper.INSTANCE.eventDtoToEvent(event));
         return Result.OK;
     }
 
-    public Result deleteEvent(Integer id) {
+    public Result deleteEvent(String id) {
         EventDTO event = new EventDTO();
-        event.setId(id);
-        event_dao.delete(EventMapper.INSTANCE.eventDtoToEvent(event));
+        event.setId(Integer.parseInt(id));
+        eventDao.delete(EventMapper.INSTANCE.eventDtoToEvent(event));
         return Result.OK;
     }
+
+
+    public Result postCart(String id) {
+        cartDao.add(new Cart(identity.getId(), Integer.valueOf(id)));
+        return Result.OK;
+    }
+
 }

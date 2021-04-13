@@ -45,7 +45,8 @@ public class EventLocationDAO implements DAO<EventLocation> {
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(Converter.MapToSqlFindString(params, "event_location"));
+            String sql = "SELECT * FROM event_location";
+            ResultSet result = statement.executeQuery(Converter.addWhereFiltersToSql(sql, params));
 
             if(result.next()) {
                 return getEventLocation(result);

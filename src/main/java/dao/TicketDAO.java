@@ -2,6 +2,7 @@ package dao;
 
 import model.Ticket;
 import config.DatabaseConfig;
+import model.TicketRow;
 import util.Converter;
 
 import java.sql.*;
@@ -30,6 +31,18 @@ public class TicketDAO implements DAO<Ticket> {
 
     }
 
+    private TicketRow getTicketRow(ResultSet result) throws SQLException {
+        TicketRow ticket = new TicketRow();
+
+        ticket.setName(result.getString("name"));
+        ticket.setDescription(result.getString("description"));
+        ticket.setPrice(result.getFloat("price"));
+        ticket.setSeat(result.getBoolean("has_seat"));
+        ticket.setCount(result.getInt("count"));
+
+        return ticket;
+    }
+
     private void fillPreparedStatement(PreparedStatement ps, Ticket ticket) throws SQLException {
         ps.setInt(1, ticket.getEventId());
         ps.setFloat(2, ticket.getPrice());
@@ -46,7 +59,8 @@ public class TicketDAO implements DAO<Ticket> {
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(Converter.MapToSqlFindString(params, "ticket"));
+            String sql = "SELECT * FROM ticket";
+            ResultSet result = statement.executeQuery(Converter.addWhereFiltersToSql(sql, params));
 
             if(result.next()) {
                 return getTicket(result);
@@ -67,15 +81,47 @@ public class TicketDAO implements DAO<Ticket> {
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(Converter.MapToSqlFindString(params, "ticket"));
+            String sql = "SELECT * FROM ticket";
+            ResultSet result = statement.executeQuery(Converter.addWhereFiltersToSql(sql, params));
 
-            List<Ticket> accounts = new ArrayList<Ticket>();
+            List<Ticket> tickets = new ArrayList<Ticket>();
 
             while(result.next()) {
-                accounts.add(getTicket(result));
+                tickets.add(getTicket(result));
             }
 
-            return accounts;
+            return tickets;
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public List<TicketRow> findAllTicketRows(Map<String, Object> params) {
+        if(params.isEmpty())
+            return null;
+
+        Connection connection = db.getConnection();
+
+        try {
+            Statement statement = connection.createStatement();
+            String sql = "SELECT event_id, name, description, price, " +
+                    "if(seat_id is null, FALSE, TRUE) as has_seat, COUNT(*) as count " +
+                    "FROM ticket ";
+
+            sql = Converter.addWhereFiltersToSql(sql, params) + " GROUP BY event_id, name";
+
+            ResultSet result = statement.executeQuery(sql);
+
+            List<TicketRow> tickets = new ArrayList<TicketRow>();
+
+            while(result.next()) {
+                tickets.add(getTicketRow(result));
+            }
+
+            return tickets;
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -110,13 +156,13 @@ public class TicketDAO implements DAO<Ticket> {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM ticket");
 
-            List<Ticket> accounts = new ArrayList<Ticket>();
+            List<Ticket> tickets = new ArrayList<Ticket>();
 
             while(result.next()) {
-                accounts.add(getTicket(result));
+                tickets.add(getTicket(result));
             }
 
-            return accounts;
+            return tickets;
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();

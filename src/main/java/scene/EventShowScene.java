@@ -1,6 +1,9 @@
 package scene;
 
 import dto.EventDTO;
+import dto.SeatDTO;
+import dto.TicketDTO;
+import dto.TicketRowDTO;
 import graphic.GUI;
 import service.API;
 import context.Context;
@@ -15,7 +18,7 @@ public class EventShowScene extends Scene {
     private API api;
     private EventDTO event;
 
-    public EventShowScene(Integer id) {
+    public EventShowScene(String id) {
         super("Event " + id);
 
         this.api = new API(Context.getIdentity());
@@ -24,12 +27,53 @@ public class EventShowScene extends Scene {
 
         this.commands = new HashMap<String, Command>();
 
+        commands.put("/tickets", new Command(2,
+                Command.GenerateAccessibilityFor.Everyone(),
+                "/tickets", "Show tickets.", (args) -> {
+            GUI.ticketsList(api.getTicketRowsForEvent(event.getId().toString()));
+            return Command.Result.OK;
+        }));
+
+        commands.put("/add_tickets", new Command(2,
+                Command.GenerateAccessibilityFor.Admin(),
+                "/add_tickets", "Add tickets to this event.", (args) -> {
+            return Command.Result.OK;
+        }));
+
+        commands.put("/buy", new Command(2,
+                Command.GenerateAccessibilityFor.User(),
+                "/buy", "Buy ticket ( -name ).", (args) -> {
+            for (String key : args.keySet()) {
+                if(key.equals("-name")){
+                    String name = args.get("-name").replace('_', ' ');
+                    TicketDTO ticket = api.getTicketForEvent(event.getId().toString(), name);
+                    if(ticket != null){
+
+                        if(ticket.getSeat() != null) {
+                            SeatDTO seat = GUI.getSeat();
+                            ticket = api.getTicketForEvent(event.getId().toString(), name, seat);
+                        }
+
+                        GUI.apiResponse(api.postCart(ticket.getId().toString()));
+
+                    } else {
+                        GUI.NotFound("Ticket");
+                    }
+                } else {
+                    GUI.invalidCommandParameter(key);
+                }
+            }
+
+            return Command.Result.OK;
+        }));
+
         commands.put("/show", new Command(2,
                 Command.GenerateAccessibilityFor.Everyone(),
                 "/show", "Show current event.", (args) -> {
             GUI.eventShow(event);
             return Command.Result.OK;
         }));
+
 
         commands.put("/edit", new Command(2,
                 Command.GenerateAccessibilityFor.Admin(),
@@ -53,7 +97,7 @@ public class EventShowScene extends Scene {
                 Command.GenerateAccessibilityFor.Admin(),
                 "/delete", "Delete event.", (args) -> {
             if(GUI.eventDelete(event)) {
-                API.Result result = api.deleteEvent(event.getId());
+                API.Result result = api.deleteEvent(event.getId().toString());
                 GUI.apiResponse(result);
                 return Command.Result.SHOULD_EXIT;
             }
@@ -82,7 +126,7 @@ public class EventShowScene extends Scene {
             GUI.help(commands);
             listenCommand(commands);
         } else {
-            GUI.eventNotFound();
+            GUI.NotFound("Event");
         }
     }
 }
