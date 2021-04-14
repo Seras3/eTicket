@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Map;
 
@@ -32,6 +33,11 @@ public class Converter {
 
     public static LocalDateTime SqlDateToLocalDateTime(java.sql.Date date) {
         return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+    }
+
+    public static LocalDateTime stringToLocalDateTime(String str) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        return LocalDateTime.parse(str, formatter);
     }
 
     public static String LocalDateTimeToString(LocalDateTime date) {

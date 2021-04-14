@@ -1,42 +1,83 @@
 package repository;
 
 import dao.*;
+import dto.EventDTO;
+import dto.EventLocationDTO;
+import mapper.EventMapper;
+import model.Event;
 import model.EventCompact;
+import model.EventRow;
 
 import java.util.HashMap;
+import java.util.List;
 
-public class EventRepository implements Repository<EventCompact> {
-    private EventDAO event_dao;
-    private LocationDAO location_dao;
-    private EventCategoryDAO event_category_dao;
-    private EventLocationDAO event_location_dao;
+public class EventRepository {
+    private EventDAO eventDao;
+    private LocationDAO locationDao;
+    private EventCategoryDAO eventCategoryDao;
+    private EventLocationDAO eventLocationDao;
 
     public EventRepository() {
-        this.event_dao = new EventDAO();
-        this.location_dao = new LocationDAO();
-        this.event_category_dao = new EventCategoryDAO();
-        this.event_location_dao = new EventLocationDAO();
+        this.eventDao = new EventDAO();
+        this.locationDao = new LocationDAO();
+        this.eventCategoryDao = new EventCategoryDAO();
+        this.eventLocationDao = new EventLocationDAO();
 
     }
 
-    @Override
-    public EventCompact get(String id) {
+
+    public EventCompact getEventCompact(String id) {
         EventCompact event = new EventCompact();
 
-        event.setEventLocation(event_location_dao.get(id));
+        event.setEventLocation(eventLocationDao.get(id));
 
-        event.setEvent(event_dao.get(event.getEventLocation().getEventId().toString()));
+        event.setEvent(eventDao.get(event.getEventLocation().getEventId().toString()));
 
 
-        event.setLocation(location_dao.find(new HashMap<String, Object>() {{
-            put("id", event.getEventLocation().getLocationId().toString());
+        event.setLocation(locationDao.find(new HashMap<String, Object>() {{
+            put("id", event.getEventLocation().getLocationId());
         }}));
 
-        event.setCategory(event_category_dao.find(new HashMap<String, Object>() {{
-            put("id", event.getEvent().getCategoryId().toString());
+        event.setCategory(eventCategoryDao.find(new HashMap<String, Object>() {{
+            put("id", event.getEvent().getCategoryId());
         }}));
 
         return event;
     }
 
+    public List<EventRow> getAllEventRows() {
+        return eventDao.getAllEventRow();
+    }
+
+    public List<Event> getAllEvents() {
+        return eventDao.getAll();
+    }
+
+    public Event getEvent(String id) {
+        return eventDao.get(id);
+    }
+
+    public boolean addEvent(EventDTO event) {
+        return eventDao.add(EventMapper.INSTANCE.eventDtoToEvent(event));
+    }
+
+    public boolean updateEvent(EventDTO event) {
+        return eventDao.update(EventMapper.INSTANCE.eventDtoToEvent(event));
+    }
+
+    public boolean deleteEvent(String id) {
+        EventDTO event = new EventDTO();
+        event.setId(Integer.parseInt(id));
+        return eventDao.delete(EventMapper.INSTANCE.eventDtoToEvent(event));
+    }
+
+    public boolean addEventLocation(EventLocationDTO event) {
+        return eventLocationDao.add(EventMapper.INSTANCE.eventLocationDtoToEventLocation(event));
+    }
+
+    public boolean deleteEventLocation(String id) {
+        EventLocationDTO event = new EventLocationDTO();
+        event.setId(Integer.parseInt(id));
+        return eventLocationDao.delete(EventMapper.INSTANCE.eventLocationDtoToEventLocation(event));
+    }
 }

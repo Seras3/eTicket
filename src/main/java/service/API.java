@@ -3,11 +3,13 @@ package service;
 
 import context.Identity;
 import dao.CartDAO;
-import dao.EventDAO;
+import dao.LocationDAO;
 import dto.*;
 import mapper.EventMapper;
+import mapper.LocationMapper;
 import mapper.TicketMapper;
 import model.*;
+import repository.EventRepository;
 import repository.TicketRepository;
 
 import java.util.ArrayList;
@@ -16,15 +18,18 @@ import java.util.List;
 
 public class API {
     private Identity identity;
-    private EventDAO eventDao;
     private TicketRepository ticketRepository;
+    private EventRepository eventRepository;
     private CartDAO cartDao;
+    private LocationDAO locationDao;
+
 
     public API(Identity identity) {
         this.identity = identity;
-        this.eventDao = new EventDAO();
         this.ticketRepository = new TicketRepository();
+        this.eventRepository = new EventRepository();
         this.cartDao = new CartDAO();
+        this.locationDao = new LocationDAO();
     }
 
     public enum Result {
@@ -74,39 +79,74 @@ public class API {
     }
 
 
-    public List<EventRowDTO> getEvents() {
-        List<EventRowDTO> events_dto_list = new ArrayList<EventRowDTO>();
-        for(Event event : eventDao.getAll()) {
-            events_dto_list.add(EventMapper.INSTANCE.eventToEventRowDto(event));
+
+    public List<EventRowDTO> getEventRows() {
+        List<EventRowDTO> eventsDtoList = new ArrayList<EventRowDTO>();
+        for(EventRow event : eventRepository.getAllEventRows()) {
+            eventsDtoList.add(EventMapper.INSTANCE.eventRowToEventRowDto(event));
         }
-        return events_dto_list;
+        return eventsDtoList;
+    }
+
+    public EventCompactDTO getEventCompact(String id) {
+        return EventMapper.INSTANCE.eventCompactToEventCompactDto(eventRepository.getEventCompact(id));
+    }
+
+
+
+    public List<EventDTO> getAllEvents() {
+        List<EventDTO> events = new ArrayList<>();
+        for(Event event : eventRepository.getAllEvents()) {
+            events.add(EventMapper.INSTANCE.eventToEventDto(event));
+        }
+
+        return events;
     }
 
     public EventDTO getEvent(String id) {
-        return EventMapper.INSTANCE.eventToEventDto(eventDao.get(id.toString()));
+        return EventMapper.INSTANCE.eventToEventDto(eventRepository.getEvent(id));
     }
 
     public Result postEvent(EventDTO event) {
-        eventDao.add(EventMapper.INSTANCE.eventDtoToEvent(event));
-        return Result.OK;
+        return  eventRepository.addEvent(event) ? Result.OK : Result.FAIL;
     }
 
     public Result putEvent(EventDTO event) {
-        eventDao.update(EventMapper.INSTANCE.eventDtoToEvent(event));
-        return Result.OK;
+        return  eventRepository.updateEvent(event) ? Result.OK : Result.FAIL;
     }
 
     public Result deleteEvent(String id) {
-        EventDTO event = new EventDTO();
-        event.setId(Integer.parseInt(id));
-        eventDao.delete(EventMapper.INSTANCE.eventDtoToEvent(event));
-        return Result.OK;
+        return eventRepository.deleteEvent(id) ? Result.OK : Result.FAIL;
+    }
+
+
+
+    public Result postEventLocation(EventLocationDTO eventLocation) {
+        return eventRepository.addEventLocation(eventLocation) ? Result.OK : Result.FAIL;
+    }
+
+    public Result deleteEventLocation(String id) {
+        return eventRepository.deleteEventLocation(id) ? Result.OK : Result.FAIL;
+    }
+
+
+    public List<LocationDTO> getAllLocations() {
+        List<LocationDTO> locations = new ArrayList<>();
+        for(Location location : locationDao.getAll()) {
+            locations.add(LocationMapper.INSTANCE.locationToLocationDto(location));
+        }
+
+        return locations;
     }
 
 
     public Result postCart(String id) {
-        cartDao.add(new Cart(identity.getId(), Integer.valueOf(id)));
-        return Result.OK;
+        if(cartDao.add(new Cart(identity.getId(), Integer.valueOf(id)))) {
+            return Result.OK;
+        } else {
+            return Result.FAIL;
+        }
+
     }
 
 }

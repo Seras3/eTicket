@@ -25,6 +25,13 @@ public class MenuScene extends Scene{
             return Command.Result.OK;
         }));
 
+        commands.put("/locations", new Command(2,
+                Command.GenerateAccessibilityFor.Admin(),
+                "/locations", "Locations panel.", (args) -> {
+            new LocationScene().run();
+            return Command.Result.OK;
+        }));
+
         commands.put("/cart", new Command(2,
                 Command.GenerateAccessibilityFor.User(),
                 "/cart", "Check your shopping cart.", (args) -> {

@@ -19,16 +19,16 @@ public class CartScene extends Scene {
         api = new API(Context.getIdentity());
         commands = new HashMap<String, Command>();
 
-        commands.put("/show", new Command(1,
+        commands.put("/list", new Command(1,
                 Command.GenerateAccessibilityFor.User(),
-                "/show", "See your shopping cart.", (args) -> {
+                "/list", "See your shopping cart.", (args) -> {
             //GUI.showCart(api.getCart());
             return Command.Result.OK;
         }));
 
-        commands.put("/buy", new Command(1,
+        commands.put("/place_order", new Command(1,
                 Command.GenerateAccessibilityFor.User(),
-                "/buy", "Purchase your tickets.", (args) -> {
+                "/place_order", "Purchase your tickets.", (args) -> {
             //api.placeOrder();
             return Command.Result.OK;
         }));

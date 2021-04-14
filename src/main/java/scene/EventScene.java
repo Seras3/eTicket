@@ -1,6 +1,5 @@
 package scene;
 
-import dto.EventDTO;
 import graphic.GUI;
 import service.API;
 import context.Context;
@@ -24,24 +23,40 @@ public class EventScene extends Scene {
         commands.put("/list", new Command(2,
                 Command.GenerateAccessibilityFor.Everyone(),
                 "/list", "Display events list.", (args) -> {
-            GUI.eventsList(api.getEvents());
+            GUI.eventRowList(api.getEventRows());
             return Command.Result.OK;
         }));
 
-        commands.put("/add", new Command(2,
+        commands.put("/list_events", new Command(2,
                 Command.GenerateAccessibilityFor.Admin(),
-                "/add", "Add event.", (args) -> {
-            API.Result result = api.postEvent(GUI.getEvent(new EventDTO()));
+                "/list_events", "Display all events from database.", (args) -> {
+            GUI.eventList(api.getAllEvents());
+            return Command.Result.OK;
+        }));
+
+        commands.put("/add_event_location", new Command(2,
+                Command.GenerateAccessibilityFor.Admin(),
+                "/add_event_location", "Add an event in another place.", (args) -> {
+            API.Result result = api.postEventLocation(GUI.getEventLocation());
             GUI.apiResponse(result);
             return Command.Result.OK;
         }));
 
-        commands.put("/show", new Command(2,
+        commands.put("/add_event", new Command(2,
+                Command.GenerateAccessibilityFor.Admin(),
+                "/add_event", "Add event.", (args) -> {
+            API.Result result = api.postEvent(GUI.getEvent());
+            GUI.apiResponse(result);
+            return Command.Result.OK;
+        }));
+
+
+        commands.put("/view", new Command(2,
                 Command.GenerateAccessibilityFor.Everyone(),
-                "/show", "Show event with -id x.", (args) -> {
+                "/view", "View event with -id x.", (args) -> {
             for (String key : args.keySet()) {
                 switch(key) {
-                    case "-id" -> new EventShowScene(args.get(key)).run();
+                    case "-id" -> new EventViewScene(args.get(key)).run();
                     default -> GUI.invalidCommandParameter(key);
                 }
             }

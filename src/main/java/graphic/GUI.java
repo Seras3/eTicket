@@ -1,10 +1,14 @@
 package graphic;
 
 import dto.*;
+import model.EventCompact;
+import model.EventLocation;
 import service.API;
 import service.AuthService;
 import util.Command;
+import util.Converter;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class GUI {
@@ -105,22 +109,62 @@ public class GUI {
         }
     }
 
-    public static void eventsList(List<EventRowDTO> events) {
+    public static void displayDate(LocalDateTime date) {
+        System.out.print(date.getDayOfMonth() + " " + date.getMonth() +" "+ date.getYear() +
+                " ( "+ (date.getHour() < 9 ? "0" + date.getHour() : date.getHour()) +
+                " : " + (date.getMinute() < 9 ? "0" + date.getMinute() : date.getMinute()) +" )");
+    }
+
+    public static void eventRowList(List<EventRowDTO> events) {
         for(EventRowDTO event : events) {
+
             System.out.println("~~~~~~~~~~~~~~~~~ ("+ event.getId() +") " + event.getName() + " ~~~~~~~~~~~~~~~~~");
+
+            System.out.println("Location: " + event.getCountry() + ", " + event.getCity());
+
+            System.out.print("When ? : ");
+            displayDate(event.getStartDate());
+            System.out.print(" - ");
+            displayDate(event.getEndDate());
+            System.out.println();
+            System.out.println();
+
+            System.out.println(event.getDescription());
+
+            System.out.println();
+        }
+    }
+
+    public static void eventCompactShow(EventCompactDTO event) {
+        System.out.println("~~~~~~~~ " + event.getEvent().getName() + " ~~~~~~~~");
+        System.out.println("Location: " + event.getLocation().getCountry() + ", " + event.getLocation().getCity());
+        System.out.println("Address: " + event.getLocation().getDetails());
+        System.out.println(event.getEvent().getDescription());
+        System.out.println();
+    }
+
+    public static void eventList(List<EventDTO> events) {
+        for(EventDTO event : events) {
+            System.out.print("(" + event.getId() + ") ");
+            System.out.println(event.getName());
+
             System.out.println(event.getDescription());
             System.out.println();
         }
     }
 
-    public static void eventShow(EventDTO event) {
-        System.out.println("~~~~~~~~ " + event.getName() + " ~~~~~~~~");
-        System.out.println(event.getDescription());
-        System.out.println();
+    public static void locationList(List<LocationDTO> locations) {
+        for(LocationDTO location : locations) {
+            System.out.print("(" + location.getId() + ") ");
+            System.out.println(location.getCountry() + ", " + location.getCity());
+            System.out.println(location.getDetails());
+            System.out.println();
+        }
     }
 
-    public static boolean eventDelete(EventDTO event) {
-        System.out.println("Are you sure you want to delete "+event.getName() + "? (Y/N)");
+    public static boolean eventDelete(EventDTO event, LocationDTO location) {
+        System.out.println("From " + location.getCountry() + ", " + location.getCity() + ".");
+        System.out.println("Are you sure you want to delete "+ event.getName() + "? (Y/N)");
         return scan.nextLine().equals("Y");
     }
 
@@ -128,13 +172,36 @@ public class GUI {
         System.out.println(msg + " not found.");
     }
 
-    public static EventDTO getEvent(EventDTO event) {
+    public static EventLocationDTO getEventLocation() {
+        EventLocationDTO event = new EventLocationDTO();
+
+        System.out.print("Event id: ");
+        event.setEventId(Integer.parseInt(scan.nextLine()));
+
+        System.out.print("Location id: ");
+        event.setLocationId(Integer.parseInt(scan.nextLine()));
+
+        System.out.print("Start date (dd-MM-yyyy HH:mm): ");
+        event.setStartDate(Converter.stringToLocalDateTime(scan.nextLine()));
+
+        System.out.print("End date (dd-MM-yyyy HH:mm): ");
+        event.setEndDate(Converter.stringToLocalDateTime(scan.nextLine()));
+
+        return event;
+    }
+
+    public static EventDTO getEvent() {
+        EventDTO event = new EventDTO();
+
         System.out.print("Name: ");
         event.setName(scan.nextLine());
+
         System.out.print("Description: ");
         event.setDescription(scan.nextLine());
+
         System.out.print("Category id: ");
         event.setCategoryId(Integer.valueOf(scan.nextLine()));
+
         return event;
     }
 

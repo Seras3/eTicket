@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TicketRepository implements Repository<Ticket> {
+public class TicketRepository {
     private TicketDAO ticket_dao;
     private SeatDAO seat_dao;
 
@@ -21,7 +21,6 @@ public class TicketRepository implements Repository<Ticket> {
         this.seat_dao = new SeatDAO();
     }
 
-    @Override
     public Ticket get(String id) {
         Ticket ticket = ticket_dao.get(id);
         if(ticket != null && ticket.getSeatId() != 0) {

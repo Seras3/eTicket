@@ -2,6 +2,7 @@ package dao;
 
 import model.Event;
 import config.DatabaseConfig;
+import model.EventRow;
 import util.Converter;
 
 import java.sql.*;
@@ -24,6 +25,21 @@ public class EventDAO implements DAO<Event> {
         event.setName(result.getString("name"));
         event.setDescription(result.getString("description"));
         event.setCategoryId(result.getInt("category_id"));
+
+        return event;
+    }
+
+    private EventRow getEventRow(ResultSet result) throws SQLException {
+        EventRow event = new EventRow();
+
+        event.setId(result.getInt("id"));
+        event.setName(result.getString("name"));
+        event.setDescription(result.getString("description"));
+        event.setCategory(result.getString("category"));
+        event.setCountry(result.getString("country"));
+        event.setCity(result.getString("city"));
+        event.setStartDate(result.getTimestamp("start_date").toLocalDateTime());
+        event.setEndDate(result.getTimestamp("end_date").toLocalDateTime());
 
         return event;
     }
@@ -86,6 +102,35 @@ public class EventDAO implements DAO<Event> {
 
             while(result.next()) {
                 events.add(getEvent(result));
+            }
+
+            return events;
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public List<EventRow> getAllEventRow() {
+        Connection connection = db.getConnection();
+
+        try {
+            Statement statement = connection.createStatement();
+            String sql = "SELECT el.id as id, e.name as name, description, " +
+                        "       ec.name as category, country, city ,start_date, end_date " +
+                        "FROM event as e, event_location as el, event_category as ec, location as l " +
+                        "WHERE e.id = el.event_id AND " +
+                        "      el.location_id = l.id AND " +
+                        "      e.category_id = ec.id";
+
+            ResultSet result = statement.executeQuery(sql);
+
+            List<EventRow> events = new ArrayList<EventRow>();
+
+            while(result.next()) {
+                events.add(getEventRow(result));
             }
 
             return events;

@@ -17,17 +17,15 @@ public class LocationDAO implements DAO<Location> {
     }
 
     private Location getLocation(ResultSet result) throws SQLException {
-        if(result.next()) {
-            Location location = new Location();
+        Location location = new Location();
 
-            location.setId(result.getInt("id"));
-            location.setCountry(result.getString("country"));
-            location.setCity(result.getString("city"));
-            location.setDetails(result.getString("details"));
+        location.setId(result.getInt("id"));
+        location.setCountry(result.getString("country"));
+        location.setCity(result.getString("city"));
+        location.setDetails(result.getString("details"));
 
-            return location;
-        }
-        return null;
+        return location;
+
     }
 
     private void fillPreparedStatement(PreparedStatement ps, Location location) throws SQLException {
@@ -46,6 +44,7 @@ public class LocationDAO implements DAO<Location> {
             Statement statement = connection.createStatement();
             String sql = "SELECT * FROM location";
             ResultSet result = statement.executeQuery(Converter.addWhereFiltersToSql(sql, params));
+
 
             if(result.next()) {
                 return getLocation(result);
@@ -66,8 +65,9 @@ public class LocationDAO implements DAO<Location> {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM location WHERE id=" + id);
 
-            Location location = getLocation(result);
-            if (location != null) return location;
+            if(result.next()) {
+                return getLocation(result);
+            }
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -86,15 +86,9 @@ public class LocationDAO implements DAO<Location> {
             List<Location> accounts = new ArrayList<Location>();
 
             while(result.next()) {
-                Location location = new Location();
-
-                location.setId(result.getInt("id"));
-                location.setCountry(result.getString("country"));
-                location.setCity(result.getString("city"));
-                location.setDetails(result.getString("details"));
-
-                accounts.add(location);
+                accounts.add(getLocation(result));
             }
+
             return accounts;
 
         } catch (SQLException throwables) {

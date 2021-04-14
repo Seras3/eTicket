@@ -7,15 +7,12 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class EventRowDTO {
+@AllArgsConstructor
+public class EventLocationDTO {
     private Integer id;
-    private String name;
-    private String description;
-    private String category;
-    private String country;
-    private String city;
+    private Integer eventId;
+    private Integer locationId;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 }
