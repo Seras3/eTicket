@@ -22,21 +22,26 @@ public class CartScene extends Scene {
         commands.put("/list", new Command(1,
                 Command.GenerateAccessibilityFor.User(),
                 "/list", "See your shopping cart.", (args) -> {
-            //GUI.showCart(api.getCart());
+            GUI.showCart(api.getCart());
             return Command.Result.OK;
         }));
 
         commands.put("/place_order", new Command(1,
                 Command.GenerateAccessibilityFor.User(),
                 "/place_order", "Purchase your tickets.", (args) -> {
-            //api.placeOrder();
+            GUI.apiResponse(api.placeOrder());
             return Command.Result.OK;
         }));
 
         commands.put("/remove", new Command(1,
                 Command.GenerateAccessibilityFor.User(),
                 "/remove", "Remove ticket from cart.", (args) -> {
-            //api.deleteTicketFromCart();
+            for (String key : args.keySet()) {
+                switch(key) {
+                    case "-id" -> GUI.apiResponse(api.deleteTicketFromCart(args.get(key)));
+                    default -> GUI.invalidCommandParameter(key);
+                }
+            }
             return Command.Result.OK;
         }));
 

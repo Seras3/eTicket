@@ -153,6 +153,35 @@ public class GUI {
         }
     }
 
+    private static void showCartTicket(TicketDTO ticket) {
+        System.out.print("id " + ticket.getId() + ": " + ticket.getName() + " ");
+        if(ticket.getSeat() != null) {
+            System.out.print("(row: " + ticket.getSeat().getRowOrd() + " ");
+            System.out.print("place: " + ticket.getSeat().getPlace() + ") ");
+        }
+        System.out.println(ticket.getPrice() + " RON");
+    }
+
+    public static void showCart(List<CartRowDTO> cartRows) {
+        if (cartRows.isEmpty()) {
+            System.out.println("YOUR CART IS EMPTY :)");
+        } else {
+            float total = 0;
+            for (CartRowDTO row : cartRows) {
+                System.out.print("EVENT: (" + row.getEvent().getId() + ") ");
+                System.out.println(row.getEvent().getName());
+
+                for (TicketDTO ticket : row.getTickets()) {
+                    GUI.showCartTicket(ticket);
+                    total += ticket.getPrice();
+                }
+                System.out.println();
+            }
+
+            System.out.printf("TOTAL : %.2f RON %n", total);
+        }
+    }
+
     public static void locationList(List<LocationDTO> locations) {
         for(LocationDTO location : locations) {
             System.out.print("(" + location.getId() + ") ");

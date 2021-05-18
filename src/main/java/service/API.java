@@ -4,7 +4,9 @@ package service;
 import context.Identity;
 import dao.CartDAO;
 import dao.LocationDAO;
+import dao.OrderDAO;
 import dto.*;
+import mapper.CartMapper;
 import mapper.EventMapper;
 import mapper.LocationMapper;
 import mapper.TicketMapper;
@@ -12,9 +14,11 @@ import model.*;
 import repository.EventRepository;
 import repository.TicketRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class API {
     private Identity identity;
@@ -22,6 +26,7 @@ public class API {
     private EventRepository eventRepository;
     private CartDAO cartDao;
     private LocationDAO locationDao;
+    private OrderDAO orderDao;
 
 
     public API(Identity identity) {
@@ -30,6 +35,7 @@ public class API {
         this.eventRepository = new EventRepository();
         this.cartDao = new CartDAO();
         this.locationDao = new LocationDAO();
+        this.orderDao = new OrderDAO();
     }
 
     public enum Result {
@@ -60,6 +66,9 @@ public class API {
             put("name", name);
         }});
 
+        if(ticket == null)
+            return null;
+
         if(ticket instanceof SeatTicket)
             return TicketMapper.INSTANCE.seatTicketToTicketDto((SeatTicket)ticket);
 
@@ -89,7 +98,11 @@ public class API {
     }
 
     public EventCompactDTO getEventCompact(String id) {
-        return EventMapper.INSTANCE.eventCompactToEventCompactDto(eventRepository.getEventCompact(id));
+        EventCompact eventCompact = eventRepository.getEventCompact(id);
+        if(eventCompact == null)
+            return null;
+
+        return EventMapper.INSTANCE.eventCompactToEventCompactDto(eventCompact);
     }
 
 
@@ -149,4 +162,66 @@ public class API {
 
     }
 
+    public List<CartRowDTO> getCart(){
+        var res = cartDao.findAll(new HashMap<String, Object>(){{
+            put("account_id", identity.getId());
+        }});
+
+        Map<Integer, CartRow> cartView = new HashMap<Integer, CartRow>();
+        res.forEach((cart) -> {
+            Ticket ticket = ticketRepository.get(cart.getTicketId().toString());
+            CartRow cartRow;
+
+            if(!cartView.containsKey(ticket.getEventId())) {
+                cartRow = new CartRow();
+
+                EventCompact eventCompact = eventRepository.getEventCompact(ticket.getEventId().toString());
+                Event event = eventCompact.getEvent();
+                event.setId(eventCompact.getEventLocation().getId());
+
+                cartRow.setEvent(event);
+                cartRow.setTickets(new ArrayList<Ticket>());
+
+                cartView.put(ticket.getEventId(), cartRow);
+            } else {
+                cartRow = cartView.get(ticket.getEventId());
+            }
+
+            cartRow.getTickets().add(ticket);
+        });
+
+        List<CartRowDTO> dto = new ArrayList<CartRowDTO>();
+        cartView.forEach((k, v) -> dto.add(CartMapper.INSTANCE.cartRowToCartRowDto(v)));
+        return dto;
+
+    }
+
+    public Result placeOrder() {
+        getCart().forEach((row) -> {
+            row.getTickets().forEach((ticket) -> {
+                Order order = new Order();
+                order.setAccountId(identity.getId());
+                order.setTicketId(ticket.getId());
+                // TODO : ADD TO ORDER
+                // orderDao.add(order);
+                deleteTicketFromCart(ticket.getId().toString());
+            });
+        });
+
+        return Result.OK;
+    }
+
+    public Result deleteTicketFromCart(String id) {
+        var res = cartDao.find(new HashMap<String, Object>(){{
+            put("account_id", identity.getId());
+            put("ticket_id", Integer.parseInt(id));
+        }});
+
+        if(res != null) {
+            cartDao.delete(res);
+            return Result.OK;
+        }
+
+        return Result.NOT_FOUND;
+    }
 }

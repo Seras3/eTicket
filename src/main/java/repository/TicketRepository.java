@@ -13,19 +13,19 @@ import java.util.List;
 import java.util.Map;
 
 public class TicketRepository {
-    private TicketDAO ticket_dao;
-    private SeatDAO seat_dao;
+    private TicketDAO ticketDao;
+    private SeatDAO seatDao;
 
     public TicketRepository() {
-        this.ticket_dao = new TicketDAO();
-        this.seat_dao = new SeatDAO();
+        this.ticketDao = new TicketDAO();
+        this.seatDao = new SeatDAO();
     }
 
     public Ticket get(String id) {
-        Ticket ticket = ticket_dao.get(id);
+        Ticket ticket = ticketDao.get(id);
         if(ticket != null && ticket.getSeatId() != 0) {
             ticket = new SeatTicket(ticket);
-            ((SeatTicket) ticket).setSeat(seat_dao.get(ticket.getSeatId().toString()));
+            ((SeatTicket) ticket).setSeat(seatDao.get(ticket.getSeatId().toString()));
         }
 
         return ticket;
@@ -35,11 +35,14 @@ public class TicketRepository {
         if(params.isEmpty())
             return null;
 
-        Ticket ticket = ticket_dao.find(params);
+        Ticket ticket = ticketDao.find(params);
+
+        if(ticket == null)
+            return null;
 
         if(ticket.getSeatId() != 0) {
             SeatTicket seat_ticket = new SeatTicket(ticket);
-            seat_ticket.setSeat(seat_dao.get(seat_ticket.getSeatId().toString()));
+            seat_ticket.setSeat(seatDao.get(seat_ticket.getSeatId().toString()));
 
             return seat_ticket;
         }
@@ -51,9 +54,9 @@ public class TicketRepository {
         if(params_ticket.isEmpty() || params_seat.isEmpty())
             return null;
 
-        Ticket ticket = ticket_dao.find(params_ticket);
-        Seat seat = seat_dao.findForTicket(ticket.getEventId().toString(), ticket.getName(), params_seat);
-        ticket = ticket_dao.find(new HashMap<>() {{
+        Ticket ticket = ticketDao.find(params_ticket);
+        Seat seat = seatDao.findForTicket(ticket.getEventId().toString(), ticket.getName(), params_seat);
+        ticket = ticketDao.find(new HashMap<>() {{
             put("seat_id", seat.getId());
         }});
 
@@ -69,10 +72,10 @@ public class TicketRepository {
 
         List<Ticket> tickets = new ArrayList<Ticket>();
 
-        for(Ticket ticket : ticket_dao.findAll(params)) {
+        for(Ticket ticket : ticketDao.findAll(params)) {
             if(ticket.getSeatId() != 0) {
                 SeatTicket seat_ticket = new SeatTicket(ticket);
-                seat_ticket.setSeat(seat_dao.get(seat_ticket.getSeatId().toString()));
+                seat_ticket.setSeat(seatDao.get(seat_ticket.getSeatId().toString()));
                 tickets.add(seat_ticket);
             } else  {
                 tickets.add(ticket);
@@ -86,7 +89,10 @@ public class TicketRepository {
     }
 
     public List<TicketRow> findAllTicketRows(Map<String, Object> params) {
-        return ticket_dao.findAllTicketRows(params);
+        return ticketDao.findAllTicketRows(params);
     }
 
+    public void deleteTicket(String id) {
+        ticketDao.delete(ticketDao.get(id));
+    }
 }

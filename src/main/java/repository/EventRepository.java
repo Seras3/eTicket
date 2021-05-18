@@ -6,6 +6,7 @@ import dto.EventLocationDTO;
 import mapper.EventMapper;
 import model.Event;
 import model.EventCompact;
+import model.EventLocation;
 import model.EventRow;
 
 import java.util.HashMap;
@@ -28,6 +29,11 @@ public class EventRepository {
 
     public EventCompact getEventCompact(String id) {
         EventCompact event = new EventCompact();
+
+        EventLocation eventLocation = eventLocationDao.get(id);
+
+        if(eventLocation == null)
+            return null;
 
         event.setEventLocation(eventLocationDao.get(id));
 

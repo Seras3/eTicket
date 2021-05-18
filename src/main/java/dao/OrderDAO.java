@@ -3,9 +3,11 @@ package dao;
 import model.Order;
 import config.DatabaseConfig;
 import util.Converter;
+import util.Time;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class OrderDAO implements DAO<Order> {
     private void fillPreparedStatement(PreparedStatement ps, Order order) throws SQLException {
         ps.setInt(1, order.getAccountId());
         ps.setInt(2, order.getTicketId());
-        ps.setTimestamp(3, Timestamp.valueOf(order.getBuyDate()));
+        ps.setTimestamp(3, Time.getCurrentTimeStamp());
     }
 
     public Order find(Map<String, Object> params) {
@@ -126,7 +128,8 @@ public class OrderDAO implements DAO<Order> {
     public boolean add(Order order) {
         Connection connection = db.getConnection();
         try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO order VALUES (NULL, ?, ?, ?)");
+            // TODO how to insert current timestamp ? (SQL SYNTAX ERROR FOR NOW)
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO order (account_id, ticket_id, buy_date) VALUES (?, ?, ?)");
             fillPreparedStatement(ps, order);
 
             if(ps.executeUpdate() == 1) {

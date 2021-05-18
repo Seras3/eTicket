@@ -6,9 +6,9 @@ import context.Identity;
 
 public class Test {
     public static void main(String[] args) {
-        API api = new API(new Identity(1, "cineva", 1));
+        API api = new API(new Identity(2, "cineva", 2));
 
-        System.out.println(GUI.getEventLocation());
+        GUI.showCart(api.getCart());
 
     }
 }
