@@ -28,6 +28,8 @@ public class API {
     private LocationDAO locationDao;
     private OrderDAO orderDao;
 
+    private LoggingService loggingService;
+
 
     public API(Identity identity) {
         this.identity = identity;
@@ -36,6 +38,7 @@ public class API {
         this.cartDao = new CartDAO();
         this.locationDao = new LocationDAO();
         this.orderDao = new OrderDAO();
+        this.loggingService = new LoggingService();
     }
 
     public enum Result {
@@ -60,8 +63,8 @@ public class API {
         return ticketRowDtos;
     }
 
-    public TicketDTO getTicketForEvent(String id, String name) {
-        Ticket ticket = ticketRepository.find(new HashMap<String, Object>() {{
+    public TicketDTO getTicketToBuyForEvent(String id, String name) {
+        Ticket ticket = ticketRepository.findToBuy(new HashMap<String, Object>() {{
             put("event_id", Integer.valueOf(id));
             put("name", name);
         }});
@@ -75,8 +78,8 @@ public class API {
         return TicketMapper.INSTANCE.ticketToTicketDto(ticket);
     }
 
-    public TicketDTO getTicketForEvent(String id, String name, SeatDTO seat) {
-        SeatTicket ticket = ticketRepository.find(new HashMap<String, Object>() {{
+    public TicketDTO getTicketToBuyForEvent(String id, String name, SeatDTO seat) {
+        SeatTicket ticket = ticketRepository.findToBuy(new HashMap<String, Object>() {{
             put("event_id", Integer.valueOf(id));
             put("name", name);
         }}, new HashMap<>() {{
@@ -155,6 +158,7 @@ public class API {
 
     public Result postCart(String id) {
         if(cartDao.add(new Cart(identity.getId(), Integer.valueOf(id)))) {
+            loggingService.addLog(String.format("Add ticket %s in cart", id));
             return Result.OK;
         } else {
             return Result.FAIL;
@@ -202,12 +206,12 @@ public class API {
                 Order order = new Order();
                 order.setAccountId(identity.getId());
                 order.setTicketId(ticket.getId());
-                // TODO : ADD TO ORDER
-                // orderDao.add(order);
+                orderDao.add(order);
                 deleteTicketFromCart(ticket.getId().toString());
             });
         });
 
+        loggingService.addLog("Place an order.");
         return Result.OK;
     }
 

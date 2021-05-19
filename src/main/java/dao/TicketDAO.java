@@ -1,5 +1,6 @@
 package dao;
 
+import context.Context;
 import model.Ticket;
 import config.DatabaseConfig;
 import model.TicketRow;
@@ -73,6 +74,37 @@ public class TicketDAO implements DAO<Ticket> {
         return null;
     }
 
+    public Ticket findToBuy(Map<String, Object> params) {
+        if(params.isEmpty())
+            return null;
+
+        Connection connection = db.getConnection();
+
+        try {
+            String userId =  Context.getIdentity().getId().toString();
+
+            Statement statement = connection.createStatement();
+            String sql = "SELECT * FROM ticket";
+            sql = Converter.addWhereFiltersToSql(sql, params);
+            sql = sql.concat(String.format("""
+                    AND id NOT IN (SELECT ticket_id FROM `order`) 
+                    AND id NOT IN (SELECT ticket_id FROM cart 
+                                   WHERE account_id = %s)        
+                    """, userId));
+
+            ResultSet result = statement.executeQuery(sql);
+
+            if(result.next()) {
+                return getTicket(result);
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return null;
+    }
+
     public List<Ticket> findAll(Map<String, Object> params) {
         if(params.isEmpty())
             return null;
@@ -106,12 +138,19 @@ public class TicketDAO implements DAO<Ticket> {
         Connection connection = db.getConnection();
 
         try {
+            String userId =  Context.getIdentity().getId().toString();
             Statement statement = connection.createStatement();
             String sql = "SELECT event_id, name, description, price, " +
                     "if(seat_id is null, FALSE, TRUE) as has_seat, COUNT(*) as count " +
                     "FROM ticket ";
 
-            sql = Converter.addWhereFiltersToSql(sql, params) + " GROUP BY event_id, name";
+            sql = Converter.addWhereFiltersToSql(sql, params);
+            sql = sql.concat(String.format("""
+                    AND id NOT IN (SELECT ticket_id FROM `order`) 
+                    AND id NOT IN (SELECT ticket_id FROM cart 
+                                   WHERE account_id = %s)        
+                    """, userId));
+            sql = sql.concat(" GROUP BY event_id, name");
 
             ResultSet result = statement.executeQuery(sql);
 

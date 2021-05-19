@@ -35,7 +35,7 @@ public class CartScene extends Scene {
 
         commands.put("/remove", new Command(1,
                 Command.GenerateAccessibilityFor.User(),
-                "/remove", "Remove ticket from cart.", (args) -> {
+                "/remove", "Remove ticket from cart ( -id ).", (args) -> {
             for (String key : args.keySet()) {
                 switch(key) {
                     case "-id" -> GUI.apiResponse(api.deleteTicketFromCart(args.get(key)));

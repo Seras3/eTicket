@@ -50,11 +50,46 @@ public class TicketRepository {
         return ticket;
     }
 
+    public Ticket findToBuy(Map<String, Object> params) {
+        if(params.isEmpty())
+            return null;
+
+        Ticket ticket = ticketDao.findToBuy(params);
+
+        if(ticket == null)
+            return null;
+
+        if(ticket.getSeatId() != 0) {
+            SeatTicket seat_ticket = new SeatTicket(ticket);
+            seat_ticket.setSeat(seatDao.get(seat_ticket.getSeatId().toString()));
+
+            return seat_ticket;
+        }
+
+        return ticket;
+    }
+
     public SeatTicket find(Map<String, Object> params_ticket, Map<String, Object> params_seat) {
         if(params_ticket.isEmpty() || params_seat.isEmpty())
             return null;
 
         Ticket ticket = ticketDao.find(params_ticket);
+        Seat seat = seatDao.findForTicket(ticket.getEventId().toString(), ticket.getName(), params_seat);
+        ticket = ticketDao.find(new HashMap<>() {{
+            put("seat_id", seat.getId());
+        }});
+
+        SeatTicket seat_ticket = new SeatTicket(ticket);
+        seat_ticket.setSeat(seat);
+
+        return seat_ticket;
+    }
+
+    public SeatTicket findToBuy(Map<String, Object> params_ticket, Map<String, Object> params_seat) {
+        if(params_ticket.isEmpty() || params_seat.isEmpty())
+            return null;
+
+        Ticket ticket = ticketDao.findToBuy(params_ticket);
         Seat seat = seatDao.findForTicket(ticket.getEventId().toString(), ticket.getName(), params_seat);
         ticket = ticketDao.find(new HashMap<>() {{
             put("seat_id", seat.getId());

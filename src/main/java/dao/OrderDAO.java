@@ -43,7 +43,7 @@ public class OrderDAO implements DAO<Order> {
 
         try {
             Statement statement = connection.createStatement();
-            String sql = "SELECT * FROM order";
+            String sql = "SELECT * FROM `order`";
             ResultSet result = statement.executeQuery(Converter.addWhereFiltersToSql(sql, params));
 
             if(result.next()){
@@ -65,7 +65,7 @@ public class OrderDAO implements DAO<Order> {
 
         try {
             Statement statement = connection.createStatement();
-            String sql = "SELECT * FROM order";
+            String sql = "SELECT * FROM `order`";
             ResultSet result = statement.executeQuery(Converter.addWhereFiltersToSql(sql, params));
 
             List<Order> orders = new ArrayList<Order>();
@@ -89,7 +89,7 @@ public class OrderDAO implements DAO<Order> {
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery("SELECT * FROM order WHERE id=" + id);
+            ResultSet result = statement.executeQuery("SELECT * FROM `order` WHERE id=" + id);
 
             if(result.next()) {
                 return getOrder(result);
@@ -107,7 +107,7 @@ public class OrderDAO implements DAO<Order> {
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery("SELECT * FROM order");
+            ResultSet result = statement.executeQuery("SELECT * FROM `order`");
 
             List<Order> orders = new ArrayList<Order>();
 
@@ -128,8 +128,7 @@ public class OrderDAO implements DAO<Order> {
     public boolean add(Order order) {
         Connection connection = db.getConnection();
         try {
-            // TODO how to insert current timestamp ? (SQL SYNTAX ERROR FOR NOW)
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO order (account_id, ticket_id, buy_date) VALUES (?, ?, ?)");
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO `order` (account_id, ticket_id, buy_date) VALUES (?, ?, ?)");
             fillPreparedStatement(ps, order);
 
             if(ps.executeUpdate() == 1) {
@@ -153,7 +152,7 @@ public class OrderDAO implements DAO<Order> {
         Connection connection = db.getConnection();
 
         try {
-            PreparedStatement ps = connection.prepareStatement("DELETE FROM order WHERE id=?");
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM `order` WHERE id=?");
             ps.setInt(1, order.getId());
 
             if(ps.executeUpdate() == 1) {

@@ -43,12 +43,12 @@ public class EventViewScene extends Scene {
                 for (String key : args.keySet()) {
                     if(key.equals("-name")){
                         String name = args.get("-name").replace('_', ' ');
-                        TicketDTO ticket = api.getTicketForEvent(event.getEventLocation().getId().toString(), name);
+                        TicketDTO ticket = api.getTicketToBuyForEvent(event.getEventLocation().getId().toString(), name);
 
                         if(ticket != null){
                             if(ticket.getSeat() != null) {
                                 SeatDTO seat = GUI.getSeat();
-                                ticket = api.getTicketForEvent(event.getEventLocation().getId().toString(), name, seat);
+                                ticket = api.getTicketToBuyForEvent(event.getEventLocation().getId().toString(), name, seat);
                             }
                             GUI.apiResponse(api.postCart(ticket.getId().toString()));
 

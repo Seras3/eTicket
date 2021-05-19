@@ -923,240 +923,238 @@ SELECT|sys.sys_config
     <table id="289" parent="2" name="event_category"/>
     <table id="290" parent="2" name="event_location"/>
     <table id="291" parent="2" name="location"/>
-    <table id="292" parent="2" name="order"/>
-    <table id="293" parent="2" name="role"/>
-    <table id="294" parent="2" name="seat"/>
-    <table id="295" parent="2" name="ticket"/>
-    <table id="296" parent="2" name="user"/>
-    <column id="297" parent="286" name="id">
+    <table id="292" parent="2" name="log"/>
+    <table id="293" parent="2" name="order"/>
+    <table id="294" parent="2" name="role"/>
+    <table id="295" parent="2" name="seat"/>
+    <table id="296" parent="2" name="ticket"/>
+    <table id="297" parent="2" name="user"/>
+    <column id="298" parent="286" name="id">
       <Position>1</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="298" parent="286" name="email">
+    <column id="299" parent="286" name="email">
       <Position>2</Position>
       <DataType>varchar(45)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="299" parent="286" name="password">
+    <column id="300" parent="286" name="password">
       <Position>3</Position>
       <DataType>varchar(45)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="300" parent="286" name="role_id">
+    <column id="301" parent="286" name="role_id">
       <Position>4</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="301" parent="286" name="email_UNIQUE">
+    <index id="302" parent="286" name="email_UNIQUE">
       <ColNames>email</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <index id="302" parent="286" name="role_id_fk_idx">
+    <index id="303" parent="286" name="role_id_fk_idx">
       <ColNames>role_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="303" parent="286" name="PRIMARY">
+    <key id="304" parent="286" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="304" parent="286" name="email_UNIQUE">
+    <key id="305" parent="286" name="email_UNIQUE">
       <ColNames>email</ColNames>
       <UnderlyingIndexName>email_UNIQUE</UnderlyingIndexName>
     </key>
-    <foreign-key id="305" parent="286" name="role_id_fk">
+    <foreign-key id="306" parent="286" name="role_id_fk">
       <ColNames>role_id</ColNames>
       <RefTableName>role</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="306" parent="287" name="account_id">
+    <column id="307" parent="287" name="account_id">
       <Position>1</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="307" parent="287" name="ticket_id">
+    <column id="308" parent="287" name="ticket_id">
       <Position>2</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="308" parent="287" name="cart_pk">
+    <index id="309" parent="287" name="cart_pk">
       <ColNames>account_id
 ticket_id</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <index id="309" parent="287" name="cart_ticket_id_fk">
+    <index id="310" parent="287" name="cart_ticket_id_fk">
       <ColNames>ticket_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="310" parent="287" name="cart_pk">
+    <key id="311" parent="287" name="cart_pk">
       <ColNames>account_id
 ticket_id</ColNames>
       <UnderlyingIndexName>cart_pk</UnderlyingIndexName>
     </key>
-    <foreign-key id="311" parent="287" name="cart_account_id_fk">
+    <foreign-key id="312" parent="287" name="cart_account_id_fk">
       <ColNames>account_id</ColNames>
       <RefTableName>account</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="312" parent="287" name="cart_ticket_id_fk">
+    <foreign-key id="313" parent="287" name="cart_ticket_id_fk">
       <ColNames>ticket_id</ColNames>
       <RefTableName>ticket</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="313" parent="288" name="id">
+    <column id="314" parent="288" name="id">
       <Position>1</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="314" parent="288" name="name">
+    <column id="315" parent="288" name="name">
       <Position>2</Position>
       <DataType>varchar(45)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="315" parent="288" name="description">
+    <column id="316" parent="288" name="description">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
     </column>
-    <column id="316" parent="288" name="category_id">
+    <column id="317" parent="288" name="category_id">
       <Position>4</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="317" parent="288" name="event_category_id_fk">
+    <index id="318" parent="288" name="event_category_id_fk">
       <ColNames>category_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="318" parent="288" name="PRIMARY">
+    <key id="319" parent="288" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="319" parent="288" name="event_category_id_fk">
+    <foreign-key id="320" parent="288" name="event_category_id_fk">
       <ColNames>category_id</ColNames>
       <RefTableName>event_category</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="320" parent="289" name="id">
+    <column id="321" parent="289" name="id">
       <Position>1</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="321" parent="289" name="name">
+    <column id="322" parent="289" name="name">
       <Position>2</Position>
       <DataType>varchar(45)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="322" parent="289" name="PRIMARY">
+    <key id="323" parent="289" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="323" parent="290" name="id">
+    <column id="324" parent="290" name="id">
       <Position>1</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="324" parent="290" name="event_id">
+    <column id="325" parent="290" name="event_id">
       <Position>2</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="325" parent="290" name="location_id">
+    <column id="326" parent="290" name="location_id">
       <Position>3</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="326" parent="290" name="start_date">
+    <column id="327" parent="290" name="start_date">
       <Position>4</Position>
       <DataType>timestamp|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="327" parent="290" name="end_date">
+    <column id="328" parent="290" name="end_date">
       <Position>5</Position>
       <DataType>timestamp|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="328" parent="290" name="event_location_event_id__fk">
+    <index id="329" parent="290" name="event_location_event_id__fk">
       <ColNames>event_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="329" parent="290" name="event_location_location_fk">
+    <index id="330" parent="290" name="event_location_location_fk">
       <ColNames>location_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="330" parent="290" name="PRIMARY">
+    <key id="331" parent="290" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="331" parent="290" name="event_location_event_id__fk">
+    <foreign-key id="332" parent="290" name="event_location_event_id__fk">
       <ColNames>event_id</ColNames>
       <RefTableName>event</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="332" parent="290" name="event_location_location_fk">
+    <foreign-key id="333" parent="290" name="event_location_location_fk">
       <ColNames>location_id</ColNames>
       <RefTableName>location</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="333" parent="291" name="id">
+    <column id="334" parent="291" name="id">
       <Position>1</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="334" parent="291" name="country">
+    <column id="335" parent="291" name="country">
       <Position>2</Position>
       <DataType>varchar(45)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="335" parent="291" name="city">
+    <column id="336" parent="291" name="city">
       <Position>3</Position>
       <DataType>varchar(45)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="336" parent="291" name="details">
+    <column id="337" parent="291" name="details">
       <Position>4</Position>
       <DataType>varchar(255)|0s</DataType>
     </column>
-    <key id="337" parent="291" name="PRIMARY">
+    <key id="338" parent="291" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="338" parent="292" name="id">
+    <column id="339" parent="292" name="id">
       <Position>1</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="339" parent="292" name="account_id">
+    <column id="340" parent="292" name="account_id">
       <Position>2</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="340" parent="292" name="ticket_id">
+    <column id="341" parent="292" name="route">
       <Position>3</Position>
-      <DataType>int|0s</DataType>
+      <DataType>varchar(100)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="341" parent="292" name="buy_date">
+    <column id="342" parent="292" name="created_at">
       <Position>4</Position>
       <DataType>timestamp|0s</DataType>
+      <NotNull>1</NotNull>
     </column>
-    <index id="342" parent="292" name="order_account_id_fk">
+    <index id="343" parent="292" name="log_account_id_fk">
       <ColNames>account_id</ColNames>
-      <Type>btree</Type>
-    </index>
-    <index id="343" parent="292" name="order_ticket_id_fk">
-      <ColNames>ticket_id</ColNames>
       <Type>btree</Type>
     </index>
     <key id="344" parent="292" name="PRIMARY">
@@ -1164,122 +1162,160 @@ ticket_id</ColNames>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="345" parent="292" name="order_account_id_fk">
+    <foreign-key id="345" parent="292" name="log_account_id_fk">
       <ColNames>account_id</ColNames>
       <RefTableName>account</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="346" parent="292" name="order_ticket_id_fk">
+    <column id="346" parent="293" name="id">
+      <Position>1</Position>
+      <DataType>int|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
+    </column>
+    <column id="347" parent="293" name="account_id">
+      <Position>2</Position>
+      <DataType>int|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="348" parent="293" name="ticket_id">
+      <Position>3</Position>
+      <DataType>int|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="349" parent="293" name="buy_date">
+      <Position>4</Position>
+      <DataType>timestamp|0s</DataType>
+    </column>
+    <index id="350" parent="293" name="order_account_id_fk">
+      <ColNames>account_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="351" parent="293" name="order_ticket_id_fk">
+      <ColNames>ticket_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="352" parent="293" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="353" parent="293" name="order_account_id_fk">
+      <ColNames>account_id</ColNames>
+      <RefTableName>account</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="354" parent="293" name="order_ticket_id_fk">
       <ColNames>ticket_id</ColNames>
       <RefTableName>ticket</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="347" parent="293" name="id">
+    <column id="355" parent="294" name="id">
       <Position>1</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="348" parent="293" name="name">
+    <column id="356" parent="294" name="name">
       <Position>2</Position>
       <DataType>varchar(45)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="349" parent="293" name="PRIMARY">
+    <key id="357" parent="294" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="350" parent="294" name="id">
+    <column id="358" parent="295" name="id">
       <Position>1</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="351" parent="294" name="row_ord">
+    <column id="359" parent="295" name="row_ord">
       <Position>2</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="352" parent="294" name="place">
+    <column id="360" parent="295" name="place">
       <Position>3</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="353" parent="294" name="PRIMARY">
+    <key id="361" parent="295" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="354" parent="295" name="id">
+    <column id="362" parent="296" name="id">
       <Position>1</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="355" parent="295" name="event_id">
+    <column id="363" parent="296" name="event_id">
       <Position>2</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="356" parent="295" name="price">
+    <column id="364" parent="296" name="price">
       <Position>3</Position>
       <DataType>decimal(10)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="357" parent="295" name="seat_id">
+    <column id="365" parent="296" name="seat_id">
       <Position>4</Position>
       <DataType>int|0s</DataType>
     </column>
-    <column id="358" parent="295" name="description">
+    <column id="366" parent="296" name="description">
       <Position>5</Position>
       <DataType>varchar(255)|0s</DataType>
     </column>
-    <column id="359" parent="295" name="name">
+    <column id="367" parent="296" name="name">
       <Position>6</Position>
       <DataType>varchar(45)|0s</DataType>
     </column>
-    <index id="360" parent="295" name="ticket_event_id_fk">
+    <index id="368" parent="296" name="ticket_event_id_fk">
       <ColNames>event_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="361" parent="295" name="ticket_seat_id_fk">
+    <index id="369" parent="296" name="ticket_seat_id_fk">
       <ColNames>seat_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="362" parent="295" name="PRIMARY">
+    <key id="370" parent="296" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="363" parent="295" name="ticket_event_id_fk">
+    <foreign-key id="371" parent="296" name="ticket_event_id_fk">
       <ColNames>event_id</ColNames>
       <RefTableName>event_location</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="364" parent="295" name="ticket_seat_id_fk">
+    <foreign-key id="372" parent="296" name="ticket_seat_id_fk">
       <ColNames>seat_id</ColNames>
       <RefTableName>seat</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="365" parent="296" name="account_id">
+    <column id="373" parent="297" name="account_id">
       <Position>1</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="366" parent="296" name="name">
+    <column id="374" parent="297" name="name">
       <Position>2</Position>
       <DataType>varchar(45)|0s</DataType>
     </column>
-    <column id="367" parent="296" name="birth_date">
+    <column id="375" parent="297" name="birth_date">
       <Position>3</Position>
       <DataType>datetime|0s</DataType>
     </column>
-    <key id="368" parent="296" name="PRIMARY">
+    <key id="376" parent="297" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>account_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="369" parent="296" name="user_account_id_fk">
+    <foreign-key id="377" parent="297" name="user_account_id_fk">
       <ColNames>account_id</ColNames>
       <RefTableName>account</RefTableName>
       <RefColNames>id</RefColNames>

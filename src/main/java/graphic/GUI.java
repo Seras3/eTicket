@@ -1,8 +1,6 @@
 package graphic;
 
 import dto.*;
-import model.EventCompact;
-import model.EventLocation;
 import service.API;
 import service.AuthService;
 import util.Command;
@@ -101,10 +99,15 @@ public class GUI {
     public static void ticketsList(List<TicketRowDTO> tickets) {
         for(TicketRowDTO ticket : tickets) {
             System.out.println(ticket.getName() + " ( " + ticket.getPrice() +" RON )" + " - " + ticket.getCount() + " tickets");
+
             if(ticket.isSeat()) {
                 System.out.println("(Pick seat)");
             }
-            System.out.println(ticket.getDescription());
+
+            if(ticket.getDescription() != null)  {
+                System.out.println(ticket.getDescription());
+            }
+
             System.out.println();
         }
     }
